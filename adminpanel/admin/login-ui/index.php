@@ -1,28 +1,3 @@
-<?php
-// Include the database connection code (you need to create this)
-include("includes/conn.php");
-
-// Check if the form was submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $user = $_POST["username"];
-    $pass = $_POST["pass"];
-
-    // Perform database query to check credentials
-    $query = "SELECT * FROM `admin_acc` WHERE admin_user = '$user' AND admin_pass = '$pass'";
-    $result = mysqli_query($conn, $query);
-
-    if ($result && mysqli_num_rows($result) > 0) {
-        // Authentication successful, redirect to the admin panel
-        header("Location: adminpanel.php");
-        exit();
-    } else {
-        // Authentication failed, show an error message
-        $error_message = "Invalid username or password.";
-    }
-}
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 					</div>
 
 
-					<div class="container-login100-form-btn align-right">
+					<div class="container-login100-form-btn" align="right">
 						<button type="submit" class="login100-form-btn">
 							Login
 						</button>
@@ -74,12 +49,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			</div>
 		</div>
 	</div>
-	<script>$("#adminLoginFrm").submit(function (event) {
-    event.preventDefault(); // Prevent the default form submission for now
-    console.log("Form submitted"); // Log a message to the console
-    // Add the code for form submission here
-});
-</script>
 	
 	<script src="login-ui/vendor/jquery/jquery-3.2.1.min.js"></script>
 	<script src="login-ui/vendor/animsition/js/animsition.min.js"></script>

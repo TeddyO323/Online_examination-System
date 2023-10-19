@@ -8,31 +8,56 @@ for any PHP, Laravel, Python, Dart, Flutter work contact me at developer.mhrony@
 * Visit My Website : developerrony.com
 */ -->
 <div class="modal fade" id="modalForAddCourse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-   <form class="refreshFrm" id="addCourseFrm" method="post">
-     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Course</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="col-md-12">
-          <div class="form-group">
-            <label>Course</label>
-            <input type="" name="course_name" id="course_name" class="form-control" placeholder="Input Course" required="" autocomplete="off">
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Add Now</button>
-      </div>
+    <div class="modal-dialog" role="document">
+        <form class="refreshFrm" id="addCourseFrm" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Course</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Course</label>
+                            <input type="text" name="course_name" id="course_name" class="form-control" placeholder="Input Course" required="" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" name="add_course" class="btn btn-primary">Add Now</button>
+                </div>
+            </div>
+        </form>
     </div>
-   </form>
-  </div>
 </div>
+
+<?php
+// PHP code goes here
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_course'])) {
+    $courseName = $_POST['cou_name'];
+
+    // Check if the course already exists in the database
+    $checkQuery = $conn->query("SELECT * FROM course_tbl WHERE cou_name = '$courseName'");
+    if ($checkQuery->num_rows > 0) {
+        // If the course already exists, display an appropriate message
+        echo "Course already added.";
+    } else {
+        // If the course doesn't exist, insert it into the database
+        $insertQuery = $conn->query("INSERT INTO course_tbl (cou_name) VALUES ('$courseName')");
+        if ($insertQuery === TRUE) {
+            // If the course is successfully added, display a success message
+            echo "Course added successfully.";
+        } else {
+            // If an error occurs while adding the course, display an error message
+            echo "Error adding course: " . $conn->error;
+        }
+    }
+}
+?>
+
 
 
 <!-- Modal For Update Course -->
@@ -189,14 +214,7 @@ for any PHP, Laravel, Python, Dart, Flutter work contact me at developer.mhrony@
               <option value="fourth year">Fourth Year</option>
             </select>
           </div>
-          <!-- /*!
-* Author Name: MH RONY.
-* GigHub Link: https://github.com/dev-mhrony
-* Facebook Link:https://www.facebook.com/dev.mhrony
-* Youtube Link: https://www.youtube.com/channel/UChYhUxkwDNialcxj-OFRcDw
-for any PHP, Laravel, Python, Dart, Flutter work contact me at developer.mhrony@gmail.com
-* Visit My Website : developerrony.com
-*/ -->
+
           <div class="form-group">
             <label>Email</label>
             <input type="email" name="email" id="email" class="form-control" placeholder="Input Email" autocomplete="off" required="">
@@ -237,14 +255,7 @@ for any PHP, Laravel, Python, Dart, Flutter work contact me at developer.mhrony@
             <input type="hidden" name="examId" value="<?php echo $exId; ?>">
             <input type="" name="question" id="course_name" class="form-control" placeholder="Input question" autocomplete="off">
           </div>
-<!-- /*!
-* Author Name: MH RONY.
-* GigHub Link: https://github.com/dev-mhrony
-* Facebook Link:https://www.facebook.com/dev.mhrony
-* Youtube Link: https://www.youtube.com/channel/UChYhUxkwDNialcxj-OFRcDw
-for any PHP, Laravel, Python, Dart, Flutter work contact me at developer.mhrony@gmail.com
-* Visit My Website : developerrony.com
-*/ -->
+
           <fieldset>
             <legend>Input word for choice's</legend>
             <div class="form-group">
@@ -282,11 +293,28 @@ for any PHP, Laravel, Python, Dart, Flutter work contact me at developer.mhrony@
     </div>
    </form>
   </div>
-</div><!-- /*!
-* Author Name: MH RONY.
-* GigHub Link: https://github.com/dev-mhrony
-* Facebook Link:https://www.facebook.com/dev.mhrony
-* Youtube Link: https://www.youtube.com/channel/UChYhUxkwDNialcxj-OFRcDw
-for any PHP, Laravel, Python, Dart, Flutter work contact me at developer.mhrony@gmail.com
-* Visit My Website : developerrony.com
-*/ -->
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("addCourseFrm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+            var form = event.target;
+            var data = new FormData(form);
+
+            fetch(form.action, {
+                method: form.method,
+                body: data
+            })
+                .then(response => response.text())
+                .then(data => {
+                    // Display the response message from the PHP script
+                    console.log(data);
+                })
+                .catch(error => {
+                    // Handle any errors that occur during the fetch request
+                    console.error('Error:', error);
+                });
+        });
+    });
+</script>

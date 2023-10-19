@@ -1,11 +1,5 @@
-<?php 
-session_start();
 
-if(!isset($_SESSION['admin']['adminnakalogin']) == true) header("location:index.php");
-
-
- ?>
-<?php include("../../conn.php"); ?>
+<?php include("database.php"); ?>
 <!-- MAO NI ANG HEADER -->
 <?php include("includes/header.php"); ?>      
 

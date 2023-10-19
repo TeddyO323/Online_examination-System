@@ -1,5 +1,10 @@
-
-<?php include("conn.php"); ?>
+<?php
+session_start();
+if (!isset($_SESSION["user"])) {
+   header("Location: login.php");
+}
+?>
+<?php include("database.php"); ?>
 <!-- MAO NI ANG HEADER -->
 <?php include("includes/header.php"); ?>      
 
@@ -51,10 +56,7 @@
        
    }
    // Else ang home nga page mo display
-   else
-   {
-     include("pages/home.php"); 
-   }
+ 
 
 
  ?> 
