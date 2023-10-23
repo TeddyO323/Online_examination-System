@@ -3,6 +3,7 @@
 <html lang="en">
 <?php 
   include("database.php");
+  include("query/countData.php");
  ?>
 
 

@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['action']) && $_GET['act
                             while ($row = $examQuery->fetch_assoc()) {
                                 echo "<tr>";
                                 echo "<td>" . $row['unit_name'] . "</td>";
-                                echo "<td>" . $row['course_name'] . "</td>";
+                                echo "<td>" . $row['exam_title'] . "</td>";
                                 echo "<td>" . $row['exam_description'] . "</td>";
                                 echo "<td>" . $row['exam_time_limit'] . "</td>";
                                 echo "<td>" . $row['num_of_questions'] . "</td>";

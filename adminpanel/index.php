@@ -17,7 +17,6 @@ if (!isset($_SESSION["user"])) {
 
 
 
-<!-- Condition If unza nga page gi click -->
 <?php 
    @$page = $_GET['page'];
 
@@ -68,10 +67,13 @@ if (!isset($_SESSION["user"])) {
      {
       include("page/examinee-result.php");
      }
+     else if($page == "edit-question")
+     {
+      include("page/edit-question.php");
+     }
 
        
    }
-   // Else ang home nga page mo display
  
 
    else
@@ -82,7 +84,6 @@ if (!isset($_SESSION["user"])) {
  ?> 
 
 
-<!-- MAO NI IYA FOOTER -->
 <?php include("includes/footer.php"); ?>
 
 <?php include("includes/modals.php"); ?>
