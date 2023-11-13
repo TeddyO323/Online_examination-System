@@ -8,7 +8,7 @@
                 <div class="page-title-wrapper">
                     <div class="page-title-heading">
                     
-                        <div>Welcome to Online Examenation Admin Panel
+                        <div>Welcome to Online Examination Admin Panel
                         </div>
                     </div>
                     <div class="page-title-actions">
@@ -89,19 +89,41 @@ echo $totExam;
                         </div>
                     </div>
                 </div>
+                <a href="index.php?page=manage-examiner">
                 <div class="col-md-6 col-xl-4">
-                    <div class="card mb-3 widget-content bg-grow-early">
-                        <div class="widget-content-wrapper text-white">
-                            <div class="widget-content-left">
-                                <div class="widget-heading">Total Examinee</div>
-                                <div class="widget-subheading" style="color:transparent;">.</div>
-                            </div>
-                            <div class="widget-content-right">
-                                <div class="widget-numbers text-white"><span>46%</span></div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="card mb-3 widget-content bg-grow-early">
+        <div class="widget-content-wrapper text-white">
+            <div class="widget-content-left">
+                <div class="widget-heading">Total Examiners</div>
+                <div class="widget-subheading" style="color:transparent;">.</div>
+            </div>
+            <div class="widget-content-right">
+                <div class="widget-numbers text-white"></a>
+                    <?php
+                    // Include the file for database connection
+                    include 'database.php';
+
+                    // Fetch the count of examiners from the database
+                    $sql = "SELECT COUNT(*) as total_examiners FROM examiner_tbl";
+                    $result = $conn->query($sql);
+
+                    if ($result->num_rows > 0) {
+                        // Output the count of examiners
+                        $row = $result->fetch_assoc();
+                        echo '<span>' . $row['total_examiners'] . '</span>';
+                    } else {
+                        echo '<span>0</span>'; // If no examiners found, display 0
+                    }
+
+                    // Close the database connection
+                    $conn->close();
+                    ?>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
                 <div class="d-xl-none d-lg-block col-md-6 col-xl-4">
                     <div class="card mb-3 widget-content bg-premium-dark">
                         <div class="widget-content-wrapper text-white">

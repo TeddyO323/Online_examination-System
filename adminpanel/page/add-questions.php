@@ -1,94 +1,77 @@
-<?php
-// Include the file for database connection
-include 'database.php';
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Escape user inputs for security
-    $question = $conn->real_escape_string($_POST['question']);
-    $choice1 = $conn->real_escape_string($_POST['choice1']);
-    $choice2 = $conn->real_escape_string($_POST['choice2']);
-    $choice3 = $conn->real_escape_string($_POST['choice3']);
-    $choice4 = $conn->real_escape_string($_POST['choice4']);
-    $correct_answer = $conn->real_escape_string($_POST['correct_answer']);
-    $ex_id = $conn->real_escape_string($_POST['ex_id']); // Make sure to get ex_id
-
-    // Attempt to insert the data
-    $sql = "INSERT INTO exam_question_tbl (ex_id, exam_question, exam_ch1, exam_ch2, exam_ch3, exam_ch4, exam_answer) VALUES ('$ex_id', '$question', '$choice1', '$choice2', '$choice3', '$choice4', '$correct_answer')";
-
-    if ($conn->query($sql) === TRUE) {
-        // Redirect to prevent form resubmission
-        echo '<script>window.location.href = window.location.href;</script>';
-        exit();
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-}
-
-$conn->close();
-?>
-
-
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
+    <title>Add Questions</title>
     <style>
-        .card-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: stretch;
-            flex-wrap: wrap;
+        /* Style for the buttons */
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
         }
-        .main-card {
-            flex: 0 0 48%;
+
+        /* Adjust the margins for the panels */
+        .panel {
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
-        .question-form {
-    width: 100%;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-}
 
-.form-title {
-    text-align: center;
-    color: #333;
-}
-  
-label {
-    font-weight: bold;
-}
+        /* Style for the panel headings */
+        .panel-heading {
+            font-size: 20px;
+            font-weight: bold;
+        }
 
-input[type="text"], select {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
+        /* Style for the panel body */
+        .panel-body {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
 
-input[type="submit"] {
-    width: 100%;
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
+        /* Style for the input fields */
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
 
-input[type="submit"]:hover {
-    background-color: #45a049;
-}
+        /* Style for the file upload input */
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
 
+        /* Adjust the margin for the label and select elements */
+        label,
+        select {
+            margin-bottom: 10px;
+        }
+        #marks {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
     </style>
+
+
+
+
+
 </head>
 <body>
-    
+
     <<?php
 // Include the file for database connection
 include 'database.php';
@@ -130,182 +113,171 @@ echo '</div>';
 ?>
 
                         <div class="card-container">
-                            <div class="main-card mb-3 card">
-                                <div class="card-header">
-                                    <i class="header-icon lnr-license icon-gradient bg-plum-plate"> </i>Exam Information
-                                </div>
-                                <div class="card-body">
-                                    <form action="index.php?page=add-questions" method="post" class="question-form">
-                                        <h1 class="form-title">Add Question</h1>
-
-                                        <label for="question">Question:</label><br>
-                                        <input type="text" id="question" name="question" required><br><br>
-
-                                        <label for="choice1">Choice 1:</label><br>
-                                        <input type="text" id="choice1" name="choice1" required><br>
-
-                                        <label for="choice2">Choice 2:</label><br>
-                                        <input type="text" id="choice2" name="choice2" required><br>
-
-                                        <label for="choice3">Choice 3:</label><br>
-                                        <input type="text" id="choice3" name="choice3" required><br>
-
-                                        <label for="choice4">Choice 4:</label><br>
-                                        <input type="text" id="choice4" name="choice4" required><br><br>
-
-                                        <label for="correct_answer">Correct Answer:</label><br>
-                                        <select name="correct_answer" id="correctAnswer">
-                                            <option value="choice1" name="choice1">Choice 1</option>
-                                            <option value="choice2" name="choice2">Choice 2</option>
-                                            <option value="choice3" name="choice3">Choice 3</option>
-                                            <option value="choice4" name="choice4">Choice 4</option>
-                                        </select><br><br>
-
-                                        <input type="submit" value="Add Question">
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="main-card mb-3 card">
+                        <div class="main-card mb-3 card">
     <div class="card-header">
-        <i class="header-icon lnr-license icon-gradient bg-plum-plate"> </i>Exam Question's
-        <span class="badge badge-pill badge-primary ml-2"></span>
-        <div class="btn-actions-pane-right"></div>
+        <i class="header-icon lnr-license icon-gradient bg-plum-plate"> </i>Exam Information
     </div>
-    <div class="card-body">
-        <div class="scroll-area-sm" style="min-height: 400px;">
-            <div class="scrollbar-container">
-                <div class="table-responsive">
-                    <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="tableList">
-                        <thead>
-                            <tr>
-                                <th class="text-left pl-1">Questions</th>
-                                <th class="text-center" width="20%">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            // Include the file for database connection
-                            include 'database.php';
+    <form method="post" action="page/process-questions.php" enctype="multipart/form-data">
+    <div class="panel">
+        <div class="panel-heading">Multiple Choice Questions with Single Answer</div>
+        <div class="panel-body">
+            <label for="mc_single_question">Question:</label><br>
+            <textarea id="mc_single_question" name="mc_single_question" rows="4" cols="50"></textarea><br>
 
-                            // Fetch data from the database
-                            $sql = "SELECT * FROM exam_question_tbl";
-                            $result = $conn->query($sql);
+            <label for="mc_single_image">Upload Image:</label><br>
+            <input type="file" id="mc_single_image" name="mc_single_image"><br>
+            <label for="marks">Marks:</label><br>
+            <input type="number" id="marks" name="marks"><br>
 
-                            if ($result->num_rows > 0) {
-                                $questionNumber = 1; // Initialize the question counter
-                                // Output data of each row
-                                while ($row = $result->fetch_assoc()) {
-                                    echo '<tr>';
-                                    echo '<td class="text-left pl-1"><strong> ' . $questionNumber . '.)</strong> ' . $row['exam_question'] . '</td>';
-                                    echo '<td class="text-center" width="20%">';
-                                    echo '<button class="btn btn-primary" onclick="editQuestion(' . $row['eqt_id'] . ')">Edit</button>';
-// ...
-echo '<button class="btn btn-danger" onclick="deleteQuestion(' . $row['eqt_id'] . ')">Delete</button>';
-// ...
-                                    echo '</td>';
-                                    
+            <label>Options:</label><br>
+            <div id="single-option-container">
+                <label for="s_option1">Option 1</label>
+                <input type="text" id="s_option1_value" name="s_option1_value" placeholder="Value for Option 1" oninput="updateSingleAnswerOptions()"><br>
 
-                                    echo '<tr><td class="text-left pl-1"><strong>A:</strong> ' . $row['exam_ch1'] . '</td></tr>';
-                                    echo '<tr><td class="text-left pl-1"><strong>B:</strong> ' . $row['exam_ch2'] . '</td></tr>';
-                                    echo '<tr><td class="text-left pl-1"><strong>C:</strong> ' . $row['exam_ch3'] . '</td></tr>';
-                                    echo '<tr><td class="text-left pl-1"><strong>D:</strong> ' . $row['exam_ch4'] . '</td></tr>';
-                                    echo '</td>';
-                                    echo '</tr>';
-// ...
-echo '<tr><td class="text-left pl-1" style="color: green;"><strong>Correct Answer:</strong> ' . $row['exam_answer'] . '</td></tr>';
-echo '</td>';
-echo '</tr>';
-$questionNumber++; // Increment the question counter
-// ...
-                                }
-                            } else {
-                                echo '<tr><td colspan="2">No questions found</td></tr>';
-                            }
-                            $conn->close();
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
+                <label for="s_option2">Option 2</label>
+                <input type="text" id="s_option2_value" name="s_option2_value" placeholder="Value for Option 2" oninput="updateSingleAnswerOptions()"><br>
+
+                <label for="s_option3">Option 3</label>
+                <input type="text" id="s_option3_value" name="s_option3_value" placeholder="Value for Option 3" oninput="updateSingleAnswerOptions()"><br>
+
+                <label for="s_option4">Option 4</label>
+                <input type="text" id="s_option4_value" name="s_option4_value" placeholder="Value for Option 4" oninput="updateSingleAnswerOptions()"><br>
             </div>
+
+            <label>Correct Answer:</label><br>
+            <select id="single-answer-dropdown" name="mc_single_correct_answer"></select>
+
+          
+
+            <input type="hidden" name="ex_id" value="<?php echo $exId; ?>">
+
+            <button type="submit">Add Question</button>
         </div>
     </div>
-</div>
+</form>
 
-
-                                                      
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-    function editQuestion(questionId) {
-        // Redirect to the edit page with the questionId as a parameter
-        window.location.href = 'index.php?page=edit-question&eqt_id=' + questionId;
-    }
-</script>
 <script>
-    function deleteQuestion(questionId) {
-        if (confirm("Are you sure you want to delete this question?")) {
-            // Make an AJAX request to delete the question
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "delete-question.php", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        // Optionally, you can handle the response from the server here
-                        alert(xhr.responseText); // Display the response message
-                        // Reload the page or perform other actions
-                        location.reload();
-                    } else {
-                        alert("Error occurred while deleting the question. Please try again.");
-                    }
-                }
-            };
-            xhr.send("eqt_id=" + questionId);
+    function updateSingleAnswerOptions() {
+        var options = document.getElementById("single-option-container").getElementsByTagName("input");
+        var selectOptions = document.getElementById("single-answer-dropdown");
+
+        // Clear the existing options
+        selectOptions.innerHTML = "";
+
+        // Add new options based on the input values
+        for (var i = 0; i < options.length; i++) {
+            var optionValue = options[i].value;
+            var optionText = options[i].value; // You can modify this to use specific values
+
+            var newOption = document.createElement("option");
+            newOption.value = optionValue;
+            newOption.text = optionText;
+
+            selectOptions.appendChild(newOption);
         }
     }
 </script>
+
+
+<form method="post" action="page/process-questions.php" enctype="multipart/form-data">
+    <div class="panel">
+        <div class="panel-heading">Multiple Choice Questions with Multiple Answers</div>
+        <div class="panel-body">
+            <label for="mc_multiple_question">Question:</label><br>
+            <textarea id="mc_multiple_question" name="mc_multiple_question" rows="4" cols="50"></textarea><br>
+
+            <label for="mc_multiple_image">Upload Image:</label><br>
+            <input type="file" id="mc_multiple_image" name="mc_multiple_image"><br>
+            <label for="marks">Marks:</label><br>
+            <input type="number" id="marks" name="marks"><br>
+
+
+            <label>Options:</label><br>
+            <div id="multiple-option-container">
+                <label for="m_option1">Option 1</label>
+                <input type="text" id="m_option1_value" name="mc_multiple_option1_value" placeholder="Value for Option 1" oninput="updateDropDownOptions()"><br>
+
+                <label for="m_option2">Option 2</label>
+                <input type="text" id="m_option2_value" name="mc_multiple_option2_value" placeholder="Value for Option 2" oninput="updateDropDownOptions()"><br>
+
+                <label for="m_option3">Option 3</label>
+                <input type="text" id="m_option3_value" name="mc_multiple_option3_value" placeholder="Value for Option 3" oninput="updateDropDownOptions()"><br>
+
+                <label for="m_option4">Option 4</label>
+                <input type="text" id="m_option4_value" name="mc_multiple_option4_value" placeholder="Value for Option 4" oninput="updateDropDownOptions()"><br>
+            </div>
+
+            <label for="correct_answer">Correct Answer:</label><br>
+<select id="correct_answer" name="correct_answer[]" multiple>
+    <option value="m_option1">Option 1</option>
+    <option value="m_option2">Option 2</option>
+    <option value="m_option3">Option 3</option>
+    <option value="m_option4">Option 4</option>
+    <div id="selected-options-container"></div>
+
+</select>
+
+
+            <input type="hidden" name="ex_id" value="<?php echo $exId; ?>">
+
+            <button type="submit">Add Question</button>
+        </div>
+    </div>
+</form>
 <script>
-    document.querySelector('.question-form').addEventListener('submit', function (event) {
-        // Prevent the default form submission
-        event.preventDefault();
+    function updateDropDownOptions() {
+        var options = document.getElementById("multiple-option-container").getElementsByTagName("input");
+        var selectOptions = document.getElementById("correct_answer");
 
-        // Get the current ex_id
-        var exId = <?php echo $exId; ?>;
+        // Clear the existing options
+        selectOptions.innerHTML = "";
 
-        // Serialize the form data
-        var formData = new URLSearchParams(new FormData(this));
+        // Add new options based on the input values
+        for (var i = 0; i < options.length; i++) {
+            var optionValue = options[i].value;
+            var optionText = options[i].value; // You can modify this to use specific values
 
-        // Append the ex_id to the form data
-        formData.append('ex_id', exId);
+            var newOption = document.createElement("option");
+            newOption.value = optionValue;
+            newOption.text = optionText;
 
-        // Send the form data via AJAX
-        fetch('index.php?page=add-questions', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log(data); // You can use this for debugging purposes
-            // Reload the page or perform any necessary actions after successful submission
-            window.location.reload();
-        })
-        .catch(error => console.error('Error:', error));
-    });
+            selectOptions.appendChild(newOption);
+        }
+    }
+
+    // Modified function to allow multiple selections
+    function allowMultipleSelection() {
+        var selectOptions = document.getElementById("correct_answer");
+        selectOptions.multiple = true;
+    }
 </script>
 
 
 
 
+<h1>Adding Questions</h1>
+
+<form method="post" action="page/process-questions.php" enctype="multipart/form-data">
+    <div class="panel">
+        <div class="panel-heading">Essay Question</div>
+        <div class="panel-body">
+            <label for="essay_question">Question:</label><br>
+            <textarea id="essay_question" name="essay_question" rows="4" cols="50"></textarea><br>
+
+            <label for="essay_image">Upload Image:</label><br>
+            <input type="file" id="essay_image" name="essay_image"><br>
+            <input type="hidden" name="ex_id" value="<?php echo $exId; ?>">
+            <label for="marks">Marks:</label><br>
+            <input type="number" id="marks" name="marks"><br>
+
+
+
+            <button type="submit">Add Question</button>
+        </div>
+    </div>
+</form>
+
 </body>
+
 </html>
+

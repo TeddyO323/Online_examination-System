@@ -1,85 +1,134 @@
-<link rel="stylesheet" type="text/css" href="css/mycss.css">
-<div class="app-main__outer">
-        <div class="app-main__inner">
-            <div class="app-page-title">
-                <marquee onmouseover="this.stop()" onmouseout="this.start()">Hello <a href="https://www.youtube.com/@codecampbdofficial">Code Camp BD</a> family. The sole owner of this code is <a href="https://www.youtube.com/@codecampbdofficial">Code Camp BD</a>. So it is not suitable for any commercial purpose or sale. So you will be instructed to use it for education. And you can message or <a href="https://api.whatsapp.com/send/?phone=01608445456&amp;text&amp;type=phone_number&amp;app_absent=0">WhatsApp</a> to do any kind of project. Also, don't forget to <a href="https://www.youtube.com/@codecampbdofficial">Subscrib</a> to our channel to get all our new videos.</marquee>
-                <div class="page-title-wrapper">
-                    <div class="page-title-heading">
-                        <div>MANAGE EXAMINEE</div>
-                    </div>
-                </div>
-            </div>        
-            
-            <div class="col-md-12">
-                <div class="main-card mb-3 card">
-                    <div class="card-header">Examinee List
-                    </div>
-                    <div class="table-responsive">
-                        <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="tableList">
-                            <thead>
-                            <tr>
-                                <th>Fullname</th>
-                                <th>Gender</th>
-                                <th>Birthdate</th>
-                                <th>Course</th>
-                                <th>Year level</th>
-                                <th>Email</th>
-                                <th>Password</th>
-                                <th>status</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                              <?php 
-                                $selExmne = $conn->query("SELECT * FROM examinee_tbl ORDER BY exmne_id DESC ");
-                                if($selExmne->rowCount() > 0)
-                                {
-                                    while ($selExmneRow = $selExmne->fetch(PDO::FETCH_ASSOC)) { ?>
-                                        <tr>
-                                           <td><?php echo $selExmneRow['exmne_fullname']; ?></td>
-                                           <td><?php echo $selExmneRow['exmne_gender']; ?></td>
-                                           <td><?php echo $selExmneRow['exmne_birthdate']; ?></td>
-                                           <td>
-                                            <?php 
-                                                 $exmneCourse = $selExmneRow['exmne_course'];
-                                                 $selCourse = $conn->query("SELECT * FROM course_tbl WHERE cou_id='$exmneCourse' ")->fetch(PDO::FETCH_ASSOC);
-                                                 echo $selCourse['cou_name'];
-                                             ?>
-                                            </td>
-                                           <td><?php echo $selExmneRow['exmne_year_level']; ?></td>
-                                           <td><?php echo $selExmneRow['exmne_email']; ?></td>
-                                           <td><?php echo $selExmneRow['exmne_password']; ?></td>
-                                           <td><?php echo $selExmneRow['exmne_status']; ?></td>
-                                           <td>
-                                               <a rel="facebox" href="facebox_modal/updateExaminee.php?id=<?php echo $selExmneRow['exmne_id']; ?>" class="btn btn-sm btn-primary">Update</a>
-
-                                           </td>
-                                        </tr>
-                                    <?php }
-                                }
-                                else
-                                { ?>
-                                    <tr>
-                                      <td colspan="2">
-                                        <h3 class="p-3">No Course Found</h3>
-                                      </td>
-                                    </tr>
-                                <?php }
-                               ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
       
-        
-</div>
-         
-<!-- /*!
-* Author Name: MH RONY.
-* GigHub Link: https://github.com/dev-mhrony
-* Facebook Link:https://www.facebook.com/dev.mhrony
-* Youtube Link: https://www.youtube.com/channel/UChYhUxkwDNialcxj-OFRcDw
-for any PHP, Laravel, Python, Dart, Flutter work contact me at developer.mhrony@gmail.com
-* Visit My Website : developerrony.com
-*/ -->
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .btn {
+            padding: 6px 12px;
+            font-size: 14px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-main__outer">
+        <div class="app-main__inner">
+        <div class="app-page-title">
+            <div class="page-title-wrapper">
+                <div class="page-title-heading">
+            <div class="app-page-title">MANAGE EXAMINEE</div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="main-card card">
+            <div class="card-header">Examinee List</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fullname</th>
+                            <th>Gender</th>
+                            <th>Birthdate</th>
+                            <th>Course</th>
+                            <th>Year level</th>
+                            <th>Email</th>
+                            <th>Password</th>
+                            <th>Contact Number</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php 
+                            // Include the database connection
+                            include 'database.php';
+                            $selExmne = $conn->query("SELECT * FROM examinee_tbl ORDER BY exmne_id DESC ");
+                            if($selExmne->num_rows > 0) {
+                                while ($selExmneRow = $selExmne->fetch_assoc()) { 
+                                    echo "<tr>";
+                                    echo "<td>".$selExmneRow['exmne_fullname']."</td>";
+                                    echo "<td>".$selExmneRow['exmne_gender']."</td>";
+                                    echo "<td>".$selExmneRow['exmne_birthdate']."</td>";
+                                
+                                    echo "<td>".$selExmneRow['exmne_course']."</td>";
+                                    echo "<td>".$selExmneRow['exmne_year_level']."</td>";
+                                    echo "<td>".$selExmneRow['exmne_email']."</td>";
+                                    echo "<td>".$selExmneRow['exmne_password']."</td>";
+                                    echo "<td>".$selExmneRow['contact_no']."</td>";
+                                    echo "<td>".$selExmneRow['address']."</td>";
+                                    echo "<td>".$selExmneRow['exmne_status']."</td>";
+                                    echo "<td>";
+                                    echo "<a href='index.php?page=edit_examinee&id=".$selExmneRow['exmne_id']."' class='btn btn-primary'>Edit</a>";
+                                    echo " <button onclick=\"confirmDelete('".$selExmneRow['exmne_id']."')\" class='btn btn-danger'>Delete</a>";
+                                    echo "</td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='11'><h3 class='p-3'>No Examinee Found</h3></td></tr>";
+                            }
+                            $conn = null;
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        function confirmDelete(id) {
+            if (confirm("Are you sure you want to delete the examinee?")) {
+                window.location.href = 'page/delete-examinee.php?id=' + id;
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,83 +1,88 @@
-<?php
-// Database connection
-include("database.php");
-
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Prepare and bind the SQL statement
-    $stmt = $conn->prepare("INSERT INTO course_tbl (course_name,  course_description, course_code, course_category, course_instructor, course_materials, course_prerequisites, course_fees) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssssd", $courseName, $courseDescription, $courseCode, $courseCategory, $courseInstructor, $courseMaterials, $coursePrerequisites, $courseFees);
-
-    // Set parameters and execute
-    $courseName = $_POST['course_name'];
-    $courseDescription = $_POST['course_description'];
-    $courseCode = $_POST['course_code'];
-    $courseCategory = $_POST['course_category'];
-    $courseInstructor = $_POST['course_instructor'];
-    $courseMaterials = $_POST['course_materials'];
-    $coursePrerequisites = $_POST['course_prerequisites'];
-    $courseFees = $_POST['course_fees'];
-
-    $stmt->execute();
-
-    // Close statement
-    $stmt->close();
-
-    // Redirect to the manage course page after submission
-    header("Location: manage-course.php");
-    exit();
-}
-$rowNumber = 1;
-
-?>
-
-<!-- manage-course.php -->
-<!-- Your existing PHP code to display the list of courses -->
-
-<head>
-    <style>
-/* Custom CSS for button display */
-
-.btns {
-    display: inline-block;
-    width: 70px;
-    height: 50px;
-    text-align: center;
-    border: gray;
-    color: #fff;
-    cursor: pointer;
-    font-weight: bold;
-    
-}
-
-
-    </style>
-</head>
-
-<link rel="stylesheet" type="text/css" href="css/mycss.css">
-<script>
-    function confirmDelete(id) {
-        if (confirm("Are you sure you want to delete this course? The entire units under the course will also be deleted.")) {
-            // AJAX call to the delete script
-            fetch('page/delete_course.php?id=' + id)
-                .then(response => {
-                    if (response.ok) {
-                        return response.text();
-                    } else {
-                        throw new Error('Network response was not ok.');
-                    }
-                })
-                .then(data => {
-                    alert('Successfully deleted course');
-                    // Refresh the page after successful deletion
-                    location.reload();
-                })
-                .catch(error => {
-                    console.error('There has been a problem with your fetch operation:', error);
-                });
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
         }
+      
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .btn {
+            padding: 6px 12px;
+            font-size: 14px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    .action-button {
+        display: inline-block;
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        text-decoration: none;
+        margin-right: 5px;
     }
-</script>
+
+    .action-button:hover {
+        background-color: #f0f0f0;
+    }
+
+    .delete-button {
+        color: #fff;
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .delete-button:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+    .edit-button {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .edit-button:hover {
+        background-color: #45a049;
+    }
+</style>
+
+
 <div class="app-main__outer">
     <div class="app-main__inner">
         <div class="app-page-title">
@@ -86,65 +91,63 @@ $rowNumber = 1;
                     <div>MANAGE COURSE</div>
                 </div>
             </div>
-        </div>        
+        </div>
         <div class="col-md-12">
             <div class="main-card mb-3 card">
                 <div class="card-header">Course List</div>
                 <div class="table-responsive">
-                    <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="tableList">
+                    <table class="align-middle mb-0 table table-bordered table-striped table-hover" id="tableList" style="width: 100%;">
                         <thead>
                             <tr>
-                            <th class="text-left" >No</th>
-
-                                <th class="text-left pl-4">Course Name</th>
-                                <th class="text-left" >Description</th>
-                                <th class="text-left">Code</th>
-                                <th class="text-left" >Category</th>
-                                <th class="text-left">Instructor</th>
-                                <th class="text-left">Materials</th>
-                                <th class="text-left">Prerequisites</th>
-                                <th class="text-left">Fees</th>
-                                <th class="text-center" width="20%">Actions</th>
+                                <th class="text-center">No</th>
+                                <th class="text-center">Course Name</th>
+                                <th class="text-center">Description</th>
+                                <th class="text-center">Code</th>
+                                <th class="text-center">Category</th>
+                                <!-- <th class="text-center">Instructor</th> -->
+                                <th class="text-center">Materials</th>
+                                <th class="text-center">Prerequisites</th>
+                                <th class="text-center">Fees</th>
+                                <th class="text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <?php
-                                // Query to fetch all courses from the database
-                                $result = $conn->query("SELECT * FROM `course_tbl` ORDER BY cou_id DESC" );
+                            <?php
+                            // Include the database connection file
+                            include("database.php");
 
-                                // Check if any courses are found
-                                if ($result->num_rows > 0) {
-                                    // Loop through each row and display the course details in a table row
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>";
-                                        echo "<td>" . $rowNumber . ".)</td>"; // Display the row number
+                            $rowNumber = 1;
 
-                                        echo "<td>" . $row['course_name'] . "</td>";
-                                        echo "<td>" . $row['course_description'] . "</td>";
-                                        echo "<td>" . $row['course_code'] . "</td>";
-                                        echo "<td>" . $row['course_category'] . "</td>";
-                                        echo "<td>" . $row['course_instructor'] . "</td>";
-                                        echo "<td>" . $row['course_materials'] . "</td>";
-                                        echo "<td>" . $row['course_prerequisites'] . "</td>";
-                                        echo "<td>" . $row['course_fees'] . "</td>";
+                            // Query to fetch data from the database
+                            $sql = "SELECT * FROM course_tbl";
+                            $result = $conn->query($sql);
 
-                                        echo "<td class='text-center'>
-                                                <form method='POST' action='index.php?page=manage-course?id=".$row['cou_id']."'>
-                                                    <div class='input-group mb-3'>
-                                                        <input type='text' class='form-control' name='course_name' value='".$row['course_name']."' aria-label='Course Name' aria-describedby='button-addon2'>
-                                                        <button class='btns btn-outline-secondary' type='submit' id='button-addon2'>Update Course</button>
-                                                    </div>
-                                                </form>
-                                                <button class='btns btn-danger btn-sm' onclick='confirmDelete(".$row['cou_id'].")'>Delete Course</button>
-                                              </td>";
-                                        echo "</tr>";
-                                        $rowNumber++;
-
-                                    }
-                                } else {
-                                    // If no courses are found, display a message in a table row
-                                    echo "<tr><td colspan='2'>No course found.</td></tr>";
+                            if ($result->num_rows > 0) {
+                                // Output data of each row
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<tr>";
+                                    echo "<td>" . $rowNumber . "</td>";
+                                    echo "<td>" . $row['course_name'] . "</td>";
+                                    echo "<td>" . $row['course_description'] . "</td>";
+                                    echo "<td>" . $row['course_code'] . "</td>";
+                                    echo "<td>" . $row['course_category'] . "</td>";
+                                    // echo "<td>" . $row['course_instructor'] . "</td>";
+                                    echo "<td>" . $row['course_materials'] . "</td>";
+                                    echo "<td>" . $row['course_prerequisites'] . "</td>";
+                                    echo "<td>" . $row['course_fees'] . "</td>";
+                                    echo "<td>
+                                    <a class='action-button edit-button' href='index.php?page=edit-course&id=".$row['cou_id']."'>Edit</a>
+                                    <a class='action-button delete-button' onclick='confirmDelete(".$row['cou_id'].")'>Delete</a>
+                                </td>";
+                               
+                                
+                                    echo "</tr>";
+                                    $rowNumber++;
                                 }
+                            } else {
+                                echo "<tr><td colspan='10'>0 results</td></tr>";
+                            }
+                            $conn->close();
                             ?>
                         </tbody>
                     </table>
@@ -153,3 +156,35 @@ $rowNumber = 1;
         </div>
     </div>
 </div>
+<script>
+    function confirmDelete(id) {
+        var confirmation = confirm("Are you sure you want to delete this course? The entire units under this course will also be deleted.");
+        if (confirmation) {
+            // AJAX call to the delete script
+            window.location.href = 'index.php?page=manage-course&id=' + id + '&confirm=true';
+        }
+    }
+</script>
+
+<?php
+// Include the database connection file
+include("database.php");
+
+// Check if the 'id' parameter is set in the URL
+if (isset($_GET['id']) && isset($_GET['confirm']) && $_GET['confirm'] === 'true') {
+    // Retrieve the course ID from the URL
+    $courseId = $_GET['id'];
+
+    // SQL query to delete the course with the given ID
+    $sql = "DELETE FROM course_tbl WHERE cou_id = $courseId";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "<script>alert('Successfully deleted course');</script>";
+    } else {
+        echo "<script>alert('Error deleting course: ".$conn->error."');</script>";
+    }
+}
+
+// Close the database connection
+$conn->close();
+?>

@@ -43,17 +43,42 @@ if (!isset($_SESSION["user"])) {
      {
      	include("page/add-exam.php");
      }
+     else if($page == "question-bank")
+     {
+     	include("page/question-bank.php");
+     }
      else if($page == "add-questions")
      {
      	include("page/add-questions.php");
      }
+     else if($page == "update-question")
+     {
+     	include("page/update-question.php");
+     }
+     else if($page == "add-examiner")
+     {
+     	include("page/add-examiner.php");
+     }
+     
      else if($page == "manage-exam")
      {
       include("page/manage-exam.php");
      }
-     else if($page == "manage-examinee")
+     else if($page == "edit-examiner")
      {
-      include("page/manage-examinee.php");
+      include("page/edit-examiner.php");
+     }
+     else if($page == "edit-unit")
+     {
+      include("page/edit-unit.php");
+     }
+     else if($page == "update_unit")
+     {
+      include("page/update_unit.php");
+     }
+     else if($page == "manage-examiner")
+     {
+      include("page/manage-examiner.php");
      }
      else if($page == "ranking-exam")
      {
@@ -72,6 +97,26 @@ if (!isset($_SESSION["user"])) {
       include("page/edit-question.php");
      }
 
+     else if($page == "edit-course")
+     {
+      include("page/edit-course.php");
+     }
+
+     else if($page == "add-examinee")
+     {
+     	include("page/add-examinee.php");
+     }
+     else if($page == "manage-examinee")
+     {
+     	include("page/manage-examinee.php");
+     }
+
+     else if($page == "edit_examinee")
+     {
+     	include("page/edit_examinee.php");
+     }
+     
+     
        
    }
  

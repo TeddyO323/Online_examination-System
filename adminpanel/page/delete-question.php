@@ -2,22 +2,23 @@
 // Include the file for database connection
 include 'database.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['eqt_id'])) {
-    $questionId = $_POST['eqt_id'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Check if the question ID is set
+    if (isset($_POST['eqt_id'])) {
+        $eqtId = $_POST['eqt_id'];
+        // SQL query to delete the question with the specified ID
+        $sql = "DELETE FROM exam_question_tbl WHERE eqt_id = $eqtId";
 
-    // SQL to delete the question based on the eqt_id
-    $sql = "DELETE FROM exam_question_tbl WHERE eqt_id = $questionId";
-
-    if ($conn->query($sql) === TRUE) {
-        // Deletion was successful
-        echo "Question deleted successfully!";
+        if ($conn->query($sql) === TRUE) {
+            echo "Question deleted successfully!";
+        } else {
+            echo "Error deleting question: " . $conn->error;
+        }
     } else {
-        // Error occurred during deletion
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Question ID not set.";
     }
 } else {
-    // Invalid request method or missing parameters
-    echo "Invalid request. Please try again.";
+    echo "Invalid request method.";
 }
 
 // Close the database connection

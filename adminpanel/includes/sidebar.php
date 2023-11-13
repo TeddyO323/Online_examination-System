@@ -101,30 +101,52 @@
                                                 </i>Manage Exam
                                             </a>
                                         </li>
+
+                                        
+
                                         <li>
-                                            <a href="index.php?page=add-questions">
+                                            <a href="index.php?page=question-bank">
                                                 <i class="metismenu-icon">
-                                                </i>Add Question
+                                                </i>Question Bank
                                             </a>
                                         </li>
+                                    
+                                    
                                        
                                     </ul>
                                 </li>
                            
                          
-                                <li class="app-sidebar__heading">MANAGE EXAMINEE</li>
+                                <li class="app-sidebar__heading">MANAGE examiner</li>
                                 <li>
-                                    <a href="" data-toggle="modal" data-target="#modalForAddExaminee">
+                                    <a href="index.php?page=add-examiner" data-toggle="modal" data-target="">
+                                        <i class="metismenu-icon pe-7s-add-user">
+                                        </i>Add Examiner
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="index.php?page=manage-examiner">
+                                        <i class="metismenu-icon pe-7s-users">
+                                        </i>Manage examiner
+                                    </a>
+                                </li>
+
+                                
+                                <li class="app-sidebar__heading">MANAGE examinee</li>
+                                <li>
+                                    <a href="index.php?page=add-examinee" data-toggle="modal" data-target="">
                                         <i class="metismenu-icon pe-7s-add-user">
                                         </i>Add Examinee
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="home.php?page=manage-examinee">
+                                    <a href="index.php?page=manage-examinee">
                                         <i class="metismenu-icon pe-7s-users">
-                                        </i>Manage Examinee
+                                        </i>Manage examinee
                                     </a>
                                 </li>
+                                
+                                
                                 <li class="app-sidebar__heading">RANKING</li>
                                 <li>
                                     <a href="home.php?page=ranking-exam">
@@ -136,9 +158,9 @@
 
                                 <li class="app-sidebar__heading">REPORTS</li>
                                 <li>
-                                    <a href="home.php?page=examinee-result">
+                                    <a href="index.php?page=examinee-result">
                                         <i class="metismenu-icon pe-7s-cup">
-                                        </i>Examinee Result
+                                        </i>examiner Result
                                     </a>
                                 </li>
                               
