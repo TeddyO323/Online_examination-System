@@ -1,7 +1,7 @@
 <?php
-// Start session
-session_start();
-
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}// Rest of your code...
 // Check if the user is logged in, if not, redirect to the login page
 if (!isset($_SESSION['reg_no'])) {
     header("Location: login.php");
@@ -12,11 +12,9 @@ require_once('database.php');
 ?>
 <?php include("includes/header.php"); ?>      
 
-<!-- UI THEME DIRI -->
 <?php include("includes/ui-theme.php"); ?>
 
 <div class="app-main">
-<!-- sidebar diri  -->
 <?php include("includes/sidebar.php"); ?>
 
 <a href=""></a>
@@ -48,10 +46,17 @@ require_once('database.php');
      {
        include("pages/edit_examinee_info.php");
      }
+     else if($page == "feedbacks")
+     {
+       include("pages/feedbacks.php");
+     }
+     else if($page == "feedback_history")
+     {
+       include("pages/feedback_history.php");
+     }
      
    }
   
-   // Else ang home nga page mo display
    else
    {
      include("pages/home.php"); 
@@ -61,7 +66,6 @@ require_once('database.php');
  ?> 
 
 
-<!-- MAO NI IYA FOOTER -->
 <?php include("includes/footer.php"); ?>
 
 <?php include("includes/modals.php"); ?>

@@ -1,6 +1,7 @@
 <?php
-session_start();
-
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}// Rest of your code...
 // Check if the user is logged in
 if (!isset($_SESSION['reg_no'])) {
     header("Location: login.php");

@@ -1,6 +1,7 @@
 <?php
-session_start();
-?>
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}?>
 
 <!DOCTYPE html>
 <html>
@@ -71,6 +72,8 @@ session_start();
 </head>
 
 <body>
+<div class="app-main__outer">
+        <div class="app-main__inner">
 
     <h2>Exam Marking Page for Examiner</h2>
 
@@ -88,7 +91,7 @@ if (isset($_SESSION['examiner_number'])) {
 
     // Step 2: Display a form for course and exam title selection
     echo '<h1>Exam Marking</h1>';
-    echo '<form method="post" action="mark-exam.php">';
+    echo '<form method="post" action="index.php?page=mark-exam">';
     echo '<label for="course">Select Course:</label>';
     echo '<select name="course" id="course">';
     while ($courseRow = $coursesResult->fetch_assoc()) {

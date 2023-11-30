@@ -82,8 +82,9 @@
                             <th class="text-center">Examiner Name</th>
                             <th class="text-center">Exam Title</th>
                             <th class="text-center">Description</th>
-                            <th class="text-center">Time limit</th>
-                            <th class="text-center">Display limit</th>
+                            <th class="text-center">Duration</th>
+                            <th class="text-center">Exam Start Date</th>
+                            <th class="text-center">Exam End Date</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
@@ -103,10 +104,11 @@
                                 echo "<td>" . $row['exam_title'] . "</td>";
                                 echo "<td>" . $row['exam_description'] . "</td>";
                                 echo "<td>" . $row['exam_time_limit'] . "</td>";
-                                echo "<td>" . $row['exam_time_limit'] . "</td>";
+                                echo "<td>" . $row['exam_start_datetime'] . "</td>";
+                                echo "<td>" . $row['exam_end_datetime'] . "</td>";
+
                                 echo "<td class='text-center'>";
                                 echo "<button class='btn btn-danger' onclick='deleteExam(" . $row['ex_id'] . ")'>Delete</button>";
-                                echo "<a href='index.php?page=add-questions&ex_id=" . $row['ex_id'] . "' class='btn btn-primary'>Manage</a>";
                                 echo "</td>";
                                 echo "</tr>";
                             }
@@ -117,6 +119,32 @@
                     </tbody>
                 </table>
             </div>
+            <script>
+function deleteExam(examId) {
+    if (confirm('Are you sure you want to delete this exam?')) {
+        // You can use AJAX to send a request to delete the exam on the server
+        // Example using fetch API
+        fetch('page/delete_exam.php?exam_id=' + examId, {
+            method: 'DELETE',
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Exam deleted successfully');
+                // Optionally, you can reload the page or update the exam list
+                location.reload();
+            } else {
+                alert('Failed to delete exam');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the exam');
+        });
+    }
+}
+</script>
+
         </div>
     </div>
 </div>

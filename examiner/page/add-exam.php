@@ -47,24 +47,24 @@
 include("database.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $unitName = $_POST['unit_name']; // Retrieve the selected unit
-    $courseName = $_POST['course_name']; // Retrieve the selected course
-    $examinerNumber = $_POST['examiner_number']; // Retrieve the selected examiner number
-    $examinerName = $_POST['examiner_name']; // Retrieve the selected examiner name
+    $unitName = $_POST['unit_name'];
+    $courseName = $_POST['course_name'];
+    $examinerNumber = $_POST['examiner_number'];
+    $examinerName = $_POST['examiner_name'];
     $examTitle = $_POST['exam_title'];
     $examTimeLimit = $_POST['exam_time_limit'];
     $numOfQuestions = $_POST['num_of_questions'];
     $examDescription = $_POST['exam_description'];
+    $maxLeaveAttempts = $_POST['max_leave_attempts']; // New field
 
-    // Check if the exam already exists
     $existsQuery = "SELECT * FROM exam_tbl WHERE course_name = '$courseName' AND exam_title = '$examTitle' AND unit_name = '$unitName'";
     $result = $conn->query($existsQuery);
 
     if ($result->num_rows > 0) {
         echo "<script>alert('Exam already exists!');</script>";
     } else {
-        $insertQuery = "INSERT INTO exam_tbl (course_name, exam_title, unit_name, examiner_number, examiner_name, exam_time_limit, num_of_questions, exam_description) 
-                        VALUES ('$courseName', '$examTitle', '$unitName', '$examinerNumber', '$examinerName', '$examTimeLimit', '$numOfQuestions', '$examDescription')";
+        $insertQuery = "INSERT INTO exam_tbl (course_name, exam_title, unit_name, examiner_number, examiner_name, exam_time_limit, num_of_questions, exam_description, max_leave_attempts) 
+                        VALUES ('$courseName', '$examTitle', '$unitName', '$examinerNumber', '$examinerName', '$examTimeLimit', '$numOfQuestions', '$examDescription', '$maxLeaveAttempts')";
 
         if ($conn->query($insertQuery) === TRUE) {
             echo "<script>alert('Exam added successfully!');</script>";
@@ -74,6 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 
 
 
@@ -197,6 +198,9 @@ while ($row = $coursesQuery->fetch_assoc()) {
 
     <label for="exam_time_limit">Exam Time Limit (in minutes):</label><br>
     <input type="number" name="exam_time_limit" id="exam_time_limit" min="1" required>
+    <br>
+    <label for="max_leave_attempts">Max Leave Attempts:</label><br>
+    <input type="number" name="max_leave_attempts" id="max_leave_attempts" min="0" required>
     <br>
     <label for="num_of_questions">Number of Questions to Display:</label><br>
     <input type="number" name="num_of_questions" id="num_of_questions" min="1" required>

@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($conn->query($sql) === TRUE) {
             echo "<script>alert('New record added successfully');</script>";
-            header("Location: index.php?page=manage-examiner"); // Redirect to the same page to clear the POST data
+            header("Location: index.php?page=add-examiner"); // Redirect to the same page to clear the POST data
             exit();
         } else {
             echo "Error: " . $sql . "<br>" . $conn->error;

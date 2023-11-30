@@ -69,14 +69,19 @@ $availableExamsQuery = $conn->query("SELECT * FROM exam_tbl WHERE course_name='$
 
                 <li class="app-sidebar__heading">TAKEN EXAM</li>
                 <li>
-                    <a href="#">
+                    <a href="index.php?pages=result">Results
                         <!-- Add taken exams here if any -->
                     </a>
                 </li>
                 <li class="app-sidebar__heading">FEEDBACKS</li>
                 <li>
-                    <a href="#" data-toggle="modal" data-target="#feedbacksModal">
+                    <a href="index.php?pages=feedbacks">
                         Add Feedbacks
+                    </a>
+                </li>
+                <li>
+                    <a href="index.php?pages=feedback_history">
+                       View Feedback
                     </a>
                 </li>
             </ul>

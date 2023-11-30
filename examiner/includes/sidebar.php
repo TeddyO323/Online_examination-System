@@ -56,31 +56,7 @@
                                        
                                     </ul>
                                 </li>
-                                <li class="app-sidebar__heading">UNITS</li>
-                                <li>
-                                    <a href="#">
-                                         <i class="metismenu-icon pe-7s-display2"></i>
-                                         VIEW UNITS
-                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                    </a>
-                                    <ul>
-                                        <li>
-                                            <a href="index.php?page=all-units" data-toggle="modal" data-target="" name = add_course>
-                                                <i class="metismenu-icon"></i>
-                                                All Units
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="index.php?page=manage-units">
-                                                <i class="metismenu-icon">
-                                                </i>My Units
-                                            </a>
-                                        </li>
-                                       
-                                    </ul>
-                                </li>
-                               
-                               
+                            
                                 <li class="app-sidebar__heading">MANAGE EXAM</li>
                                 <li>
                                     <a href="#">
@@ -102,9 +78,15 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="page/mark-exam.php" data-toggle="modal" data-target="">
+                                            <a href="index.php?page=mark-exam" data-toggle="modal" data-target="">
                                                 <i class="metismenu-icon"></i>
                                                 Mark Exams
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="index.php?page=question-bank" data-toggle="modal" data-target="">
+                                                <i class="metismenu-icon"></i>
+                                               Question Bank
                                             </a>
                                         </li>
                                     
@@ -112,19 +94,10 @@
                                     </ul>
                                 </li>
                            
-                         
-                                <li class="app-sidebar__heading">RANKING</li>
-                                <li>
-                                    <a href="home.php?page=ranking-exam">
-                                        <i class="metismenu-icon pe-7s-cup">
-                                        </i>Ranking By Exam
-                                    </a>
-                                </li>
-
-
+            
                                 <li class="app-sidebar__heading">REPORTS</li>
                                 <li>
-                                    <a href="home.php?page=examiner-result">
+                                    <a href="index.php?page=examinee-result">
                                         <i class="metismenu-icon pe-7s-cup">
                                         </i>examiner Result
                                     </a>
@@ -133,7 +106,7 @@
 
                                  <li class="app-sidebar__heading">FEEDBACKS</li>
                                 <li>
-                                    <a href="home.php?page=feedbacks">
+                                    <a href="index.php?page=feedbacks">
                                         <i class="metismenu-icon pe-7s-chat">
                                         </i>All Feedbacks
                                     </a>

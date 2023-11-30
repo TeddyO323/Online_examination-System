@@ -84,6 +84,7 @@
                                 <th class="text-center">Certification</th>
                                 <th class="text-center">Notes</th>
                                 <th class="text-center">Gender</th>
+                                <!-- <th class='text-center'>Last Login</th> -->
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>
@@ -114,9 +115,12 @@
                                     echo "<td class='text-center'>" . $row["certification"] . "</td>";
                                     echo "<td class='text-center'>" . $row["notes"] . "</td>";
                                     echo "<td class='text-center'>" . $row["gender"] . "</td>";
+                                    // echo "<td>".($row['last_login'] ? $row['last_login'] : "Never")."</td>";
+
                                     echo "<td class='text-center'>
                                     <a href='index.php?page=edit-examiner&id=".$row['examiner_number']."' class='btn btn-primary'>Edit</a>
                                     <a href='page/delete-examiner.php?id=".$row['examiner_number']."' class='btn btn-danger'>Delete</a>
+                                    
                                     </td>";
                                     echo "</tr>";
                                 }

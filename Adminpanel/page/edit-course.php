@@ -76,11 +76,11 @@ echo "<input type='hidden' name='course_id' value='" . $row['cou_id'] . "'>";
                 echo "Course Name: <input type='text' name='course_name' value='" . $row['course_name'] . "'><br><br>";
                 echo "Course Description: <input type='text' name='course_description' value='" . $row['course_description'] . "'><br><br>";
                 echo "Course Code: <input type='text' name='course_code' value='" . $row['course_code'] . "'><br><br>";
-                echo "Category: <input type='text' name='course_category' value='" . $row['course_category'] . "'><br><br>";
-                echo "Instructor: <input type='text' name='course_instructor' value='" . $row['course_instructor'] . "'><br><br>";
+                // echo "Category: <input type='text' name='course_category' value='" . $row['course_category'] . "'><br><br>";
+                // echo "Instructor: <input type='text' name='course_instructor' value='" . $row['course_instructor'] . "'><br><br>";
                 echo "Materials: <input type='text' name='course_materials' value='" . $row['course_materials'] . "'><br><br>";
                 echo "Prerequisites: <input type='text' name='course_prerequisites' value='" . $row['course_prerequisites'] . "'><br><br>";
-                echo "Fees: <input type='text' name='course_fees' value='" . $row['course_fees'] . "'><br><br>";
+                // echo "Fees: <input type='text' name='course_fees' value='" . $row['course_fees'] . "'><br><br>";
                 
                 echo "<input type='submit' value='Update Course'>";
                 echo "</form>";

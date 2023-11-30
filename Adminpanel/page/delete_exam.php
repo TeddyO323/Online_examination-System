@@ -1,21 +1,27 @@
 <?php
-// Include your database connection file
 include("database.php");
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['exam_id'])) {
-        $examId = $_POST['exam_id'];
+// Assuming you are passing exam_id through GET parameter
+$examId = $_GET['exam_id'];
 
-        // Perform the deletion query here
-        $deleteQuery = "DELETE FROM exam_tbl WHERE ex_id = $examId";
-
-        if ($conn->query($deleteQuery) === TRUE) {
-            echo "Exam deleted successfully";
-        } else {
-            echo "Error deleting exam: " . $conn->error;
-        }
-    } else {
-        echo "Exam ID not provided";
-    }
+// Check if the exam_id is provided
+if (!isset($examId)) {
+    $response = ['success' => false, 'message' => 'Exam ID not provided'];
+    echo json_encode($response);
+    exit;
 }
+
+// Perform the deletion in your database
+$sql = "DELETE FROM exam_tbl WHERE ex_id = '$examId'";
+
+if ($conn->query($sql) === TRUE) {
+    $response = ['success' => true, 'message' => 'Exam deleted successfully'];
+    echo json_encode($response);
+} else {
+    $response = ['success' => false, 'message' => 'Error deleting exam: ' . $conn->error];
+    echo json_encode($response);
+}
+
+// Close the database connection
+$conn->close();
 ?>

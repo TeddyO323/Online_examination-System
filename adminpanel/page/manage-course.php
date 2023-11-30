@@ -103,7 +103,7 @@
                                 <th class="text-center">Course Name</th>
                                 <th class="text-center">Description</th>
                                 <th class="text-center">Code</th>
-                                <th class="text-center">Category</th>
+                                <!-- <th class="text-center">Category</th> -->
                                 <!-- <th class="text-center">Instructor</th> -->
                                 <th class="text-center">Materials</th>
                                 <th class="text-center">Prerequisites</th>
@@ -130,7 +130,7 @@
                                     echo "<td>" . $row['course_name'] . "</td>";
                                     echo "<td>" . $row['course_description'] . "</td>";
                                     echo "<td>" . $row['course_code'] . "</td>";
-                                    echo "<td>" . $row['course_category'] . "</td>";
+                                    // echo "<td>" . $row['course_category'] . "</td>";
                                     // echo "<td>" . $row['course_instructor'] . "</td>";
                                     echo "<td>" . $row['course_materials'] . "</td>";
                                     echo "<td>" . $row['course_prerequisites'] . "</td>";

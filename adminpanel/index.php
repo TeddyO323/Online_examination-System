@@ -5,14 +5,11 @@ if (!isset($_SESSION["user"])) {
 }
 ?>
 <?php include("database.php"); ?>
-<!-- MAO NI ANG HEADER -->
 <?php include("includes/header.php"); ?>      
 
-<!-- UI THEME DIRI -->
 <?php include("includes/ui-theme.php"); ?>
 
 <div class="app-main">
-<!-- sidebar diri  -->
 <?php include("includes/sidebar.php"); ?>
 
 
@@ -42,6 +39,10 @@ if (!isset($_SESSION["user"])) {
      else if($page == "add-exam")
      {
      	include("page/add-exam.php");
+     }
+     else if($page == "edit-exam")
+     {
+     	include("page/edit-exam.php");
      }
      else if($page == "question-bank")
      {

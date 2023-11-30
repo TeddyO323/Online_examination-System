@@ -9,14 +9,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $courseName = $_POST['course_name'];
     $courseDescription = $_POST['course_description'];
     $courseCode = $_POST['course_code'];
-    $courseCategory = $_POST['course_category'];
-    $courseInstructor = $_POST['course_instructor'];
+
     $courseMaterials = $_POST['course_materials'];
     $coursePrerequisites = $_POST['course_prerequisites'];
-    $courseFees = $_POST['course_fees'];
 
     // Update the course in the database
-    $sql = "UPDATE course_tbl SET course_name='$courseName', course_description='$courseDescription', course_code='$courseCode', course_category='$courseCategory', course_instructor='$courseInstructor', course_materials='$courseMaterials', course_prerequisites='$coursePrerequisites', course_fees='$courseFees' WHERE cou_id=$courseID";
+    $sql = "UPDATE course_tbl SET course_name='$courseName', course_description='$courseDescription', course_code='$courseCode', course_materials='$courseMaterials', course_prerequisites='$coursePrerequisites' WHERE cou_id=$courseID";
 
     if ($conn->query($sql) === TRUE) {
         echo "<script>alert('Course updated successfully');</script>";

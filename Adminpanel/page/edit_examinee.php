@@ -22,7 +22,7 @@
             $birthdate = $examinee['exmne_birthdate'];
             $gender = $examinee['exmne_gender'];
             $course = $examinee['exmne_course'];
-            $year_level = $examinee['exmne_year_level'];
+            // $year_level = $examinee['exmne_year_level'];
             $email = $examinee['exmne_email'];
             $password = $examinee['exmne_password'];
             $contact_no = $examinee['contact_no'];
@@ -159,13 +159,6 @@
 
 
 
-        <label>Year Level</label>
-    <select name="year_level">
-        <option value="first year" <?php if($year_level == 'first year') echo 'selected'; ?>>First Year</option>
-        <option value="second year" <?php if($year_level == 'second year') echo 'selected'; ?>>Second Year</option>
-        <option value="third year" <?php if($year_level == 'third year') echo 'selected'; ?>>Third Year</option>
-        <option value="fourth year" <?php if($year_level == 'fourth year') echo 'selected'; ?>>Fourth Year</option>
-    </select><br><br>
         <label>Email</label>
         <input type="email" name="email" value="<?php echo $email; ?>"><br><br>
 

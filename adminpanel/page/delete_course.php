@@ -24,7 +24,7 @@ if (isset($_GET['id'])) {
             if (confirmation) {
                 // User confirmed, redirect to this page with confirmation parameter
                 var courseId = $courseId;
-                window.location.href = 'this_script.php?id=' + courseId + '&confirm=true';
+                window.location.href = 'manage-course.php?id=' + courseId + '&confirm=true';
             } else {
                 // User canceled, redirect back to the manage course page
                 window.location.href = 'manage-course.php';

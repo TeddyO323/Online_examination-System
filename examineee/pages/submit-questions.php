@@ -1,74 +1,74 @@
 <?php
-session_start();
-
-// Replace with your database connection details
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 require_once('database.php');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if the form data has been submitted
+// Retrieve exam_id from the URL
+$examId = $_GET['exam_id'] ?? null;
 
-    // Check if the user is logged in
-    if (isset($_SESSION['reg_no'])) {
-        $reg_no = $_SESSION['reg_no']; // Get the logged-in user's ID
+if ($examId === null) {
+    // Handle the case when the exam_id is missing or empty
+    echo "Error: Missing or empty exam_id parameter.";
+    // Optionally, you might want to redirect the user or display a different error message.
+    exit();
+}
 
+// Check if the user is logged in
+if (isset($_SESSION['reg_no'])) {
+    $userRegistrationNumber = $_SESSION['reg_no']; // Get the logged-in user's registration number
 
-        // Assuming you have retrieved the exam_id from the URL
-        if (isset($_GET['exam_id']) && !empty($_GET['exam_id'])) {
-            $exam_id = $_GET['exam_id'];
+    // Process form submission
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Insert the attempt into the exam_attempt table
+        $sqlInsertAttempt = "INSERT INTO exam_attempt (reg_no, exam_id) VALUES ('$userRegistrationNumber', '$examId')";
+        $resultInsertAttempt = $conn->query($sqlInsertAttempt);
 
-      // Insert data into the exam_attempt table
-$exam_attempt_stmt = $conn->prepare("INSERT INTO exam_attempt (reg_no, exam_id) VALUES (?, ?)");
-
-if ($exam_attempt_stmt) {
-    $exam_attempt_stmt->bind_param("si", $reg_no, $exam_id);
-
-    if ($exam_attempt_stmt->execute() === TRUE) {
-        // Fetch the examat_id after insertion
-        $examat_id = $exam_attempt_stmt->insert_id;
-        echo "New record created successfully in exam_attempt table. Exam Attempt ID: $examat_id<br>";
-    } else {
-        echo "Error: " . $exam_attempt_stmt->error;
-    }
-
-    $exam_attempt_stmt->close();
-
-    // Process the exam answers here
-    foreach ($_POST['answer'] as $quest_id => $exans_answer) {
-        // Prepare and execute the SQL query to insert the data into the exam_answers table
-        $exam_answers_stmt = $conn->prepare("INSERT INTO exam_answers (reg_no, exam_id, quest_id, exans_answer, examat_id) VALUES (?, ?, ?, ?, ?)");
-
-        if ($exam_answers_stmt) {
-            if (is_array($exans_answer)) {
-                $exans_answer = implode(", ", $exans_answer); // Convert array to a string
-            }
-
-            // Remove HTML tags from the answer
-            $exans_answer = strip_tags($exans_answer);
-
-            $exam_answers_stmt->bind_param("siisi", $reg_no, $exam_id, $quest_id, $exans_answer, $examat_id);
-
-            if ($exam_answers_stmt->execute() === TRUE) {
-                echo "New record created successfully for question with ID: " . $quest_id . "<br>";
-            } else {
-                echo "Error: " . $exam_answers_stmt->error;
-            }
-
-            $exam_answers_stmt->close();
+        if (!$resultInsertAttempt) {
+            echo "Error: " . $sqlInsertAttempt . "<br>" . $conn->error;
+            // Handle the error accordingly, redirect, display a message, etc.
         } else {
-            echo "Prepare statement failed: " . $conn->error;
+            // Get the exam attempt ID
+            $examAttemptId = $conn->insert_id;
+
+            // Assuming you have a table named exam_answers with columns exans_id, reg_no, exam_id, quest_id, exans_answer, examat_id
+            foreach ($_POST as $key => $values) {
+                // Check if the input field corresponds to an answer
+                if (strpos($key, 'answer_') === 0) {
+                    // Extract question_id from the input field name
+                    $questionId = substr($key, strlen('answer_'));
+            
+                    if (is_array($values)) {
+                        // Multiple-choice question
+                        $answer = implode(',', $values);
+                    } else {
+                        // Single-choice question
+                        $answer = $values;
+                    }
+            
+                    // Process and store the answer in the database
+                    $sqlInsertAnswer = "INSERT INTO exam_answers (reg_no, exam_id, quest_id, exans_answer, examat_id) VALUES ('$userRegistrationNumber', '$examId', '$questionId', '$answer', '$examAttemptId')";
+                    $resultInsertAnswer = $conn->query($sqlInsertAnswer);
+            
+                    if (!$resultInsertAnswer) {
+                        echo "Error: " . $sqlInsertAnswer . "<br>" . $conn->error;
+                        // Handle the error accordingly, redirect, display a message, etc.
+                    }
+                }
+            }
+            
+            // Success message
+            echo "Attempt recorded successfully!";
+            // Optionally, you can redirect the user to a success page
+            // header('Location: exam_result.php?exam_id=' . $examId);
+            // exit();
         }
     }
 } else {
-    echo "Prepare statement failed: " . $conn->error;
+    // Error message for not being logged in
+    echo "Error: User not logged in.";
 }
 
-        } else {
-            echo "Exam ID is null or empty";
-        }
-    } else {
-        echo "User not logged in"; // Handle the case where the user is not logged in
-    }
-
-    $conn->close();
-}
+// Close the database connection
+$conn->close();
 ?>

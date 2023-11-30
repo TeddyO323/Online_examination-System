@@ -47,24 +47,44 @@
 include("database.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $unitName = $_POST['unit_name']; // Retrieve the selected unit
-    $courseName = $_POST['course_name']; // Retrieve the selected course
-    $examinerNumber = $_POST['examiner_number']; // Retrieve the selected examiner number
-    $examinerName = $_POST['examiner_name']; // Retrieve the selected examiner name
+    $courseName = $_POST['course_name'];
+    $examinerNumber = $_POST['examiner_number'];
+    $examinerName = $_POST['examiner_name'];
     $examTitle = $_POST['exam_title'];
     $examTimeLimit = $_POST['exam_time_limit'];
-    $numOfQuestions = $_POST['num_of_questions'];
     $examDescription = $_POST['exam_description'];
-
-    // Check if the exam already exists
-    $existsQuery = "SELECT * FROM exam_tbl WHERE course_name = '$courseName' AND exam_title = '$examTitle' AND unit_name = '$unitName'";
+    $maxLeaveAttempts = $_POST['max_leave_attempts']; // New field
+    $Attempts = $_POST['no_of_attempts']; // New field
+        // Assuming form fields are named 'examStartDate', 'examStartTime', 'examEndDate', 'examEndTime'
+        $examStartDate = $_POST['examStartDate'];
+        $examStartTime = $_POST['examStartTime'];
+        $examEndDate = $_POST['examEndDate'];
+        $examEndTime = $_POST['examEndTime'];
+        $examTimeLimitInMinutes = isset($_POST['exam_time_limit']) ? (int)$_POST['exam_time_limit'] : 0;
+        
+    $existsQuery = "SELECT * FROM exam_tbl WHERE course_name = '$courseName' AND exam_title = '$examTitle'";
     $result = $conn->query($existsQuery);
+
+
+    
+        // Combine start and end date/times into datetime strings
+        $examStartDateTime = $examStartDate . ' ' . $examStartTime;
+        $examEndDateTime = $examEndDate . ' ' . $examEndTime;
+        // Calculate the expected end datetime based on the start datetime and time limit
+        $expectedEndDateTime = date('Y-m-d H:i:s', strtotime($examStartDateTime) + $examTimeLimitInMinutes * 60);
+
+        // Check if the actual end datetime is later than or equal to the expected end datetime
+        if ($examEndDateTime < $expectedEndDateTime) {
+            echo '<script>alert("Error: Exam end datetime should be at least ' . $examTimeLimitInMinutes . ' minutes after the start datetime.");</script>';
+            exit; // Optionally, you can redirect or handle the error as needed
+        }
+    
 
     if ($result->num_rows > 0) {
         echo "<script>alert('Exam already exists!');</script>";
     } else {
-        $insertQuery = "INSERT INTO exam_tbl (course_name, exam_title, unit_name, examiner_number, examiner_name, exam_time_limit, num_of_questions, exam_description) 
-                        VALUES ('$courseName', '$examTitle', '$unitName', '$examinerNumber', '$examinerName', '$examTimeLimit', '$numOfQuestions', '$examDescription')";
+        $insertQuery = "INSERT INTO exam_tbl (course_name, exam_title,  examiner_number, examiner_name, exam_time_limit,  exam_description, max_leave_attempts, attempts_allowed, exam_start_datetime, exam_end_datetime) 
+                        VALUES ('$courseName', '$examTitle', '$examinerNumber', '$examinerName', '$examTimeLimit',  '$examDescription', '$maxLeaveAttempts','$Attempts','$examStartDateTime', '$examEndDateTime')";
 
         if ($conn->query($insertQuery) === TRUE) {
             echo "<script>alert('Exam added successfully!');</script>";
@@ -74,6 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 
 
 
@@ -108,8 +129,8 @@ while ($row = $coursesQuery->fetch_assoc()) {
         <?php endforeach; ?>
     </select>
     <br>
-    <label for="unit_name">Select Unit:</label><br>
-    <select name="unit_name" id="unitSelect">
+    <!-- <label for="unit_name">Select Unit:</label><br>
+    <select name="unit_name" id="unitSelect"> -->
         <!-- Options will be dynamically populated via JavaScript -->
         <script>
     const courseSelect = document.getElementById('courseSelect');
@@ -191,21 +212,61 @@ while ($row = $coursesQuery->fetch_assoc()) {
 
 </select>
 <br>
+<label for="examStartDate">Exam Start Date:</label>
+<input type="date" id="examStartDate" name="examStartDate">
+<br>
+
+<label for="examStartTime">Exam Start Time:</label>
+<input type="time" id="examStartTime" name="examStartTime">
+<br>
+
+<label for="examEndDate">Exam End Date:</label>
+<input type="date" id="examEndDate" name="examEndDate">
+<br>
+
+<label for="examEndTime">Exam End Time:</label>
+<input type="time" id="examEndTime" name="examEndTime">
 
 
-
+<br>
 
     <label for="exam_time_limit">Exam Time Limit (in minutes):</label><br>
     <input type="number" name="exam_time_limit" id="exam_time_limit" min="1" required>
     <br>
-    <label for="num_of_questions">Number of Questions to Display:</label><br>
-    <input type="number" name="num_of_questions" id="num_of_questions" min="1" required>
+    <label for="no_of_attempts">Number of Attempts:</label><br>
+    <input type="number" name="no_of_attempts" id="no_of_attempts" min="0" required>
     <br>
+   
+    <label for="max_leave_attempts">Max Leave Attempts:</label><br>
+    <input type="number" name="max_leave_attempts" id="max_leave_attempts" min="0" required>
+    <br>
+   
     <label for="exam_description">Exam Description:</label><br>
     <textarea name="exam_description" id="exam_description" rows="4" required></textarea>
     <br>
-    <button type="submit">Submit</button>
+    <button type="submit" id="submitButton">Submit</button>
 </form>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var examStartDate = document.getElementById('examStartDate');
+        var examStartTime = document.getElementById('examStartTime');
+        var examEndDate = document.getElementById('examEndDate');
+        var examEndTime = document.getElementById('examEndTime');
+        var submitButton = document.getElementById('submitButton'); // Adjust the actual ID
+
+        submitButton.addEventListener('click', function (event) {
+            var startDateTime = new Date(examStartDate.value + ' ' + examStartTime.value);
+            var endDateTime = new Date(examEndDate.value + ' ' + examEndTime.value);
+
+            // Check if the end date/time is before or equal to the start date/time
+            if (endDateTime <= startDateTime) {
+                alert('Ending date and time cannot be before or equal to starting date and time.');
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+    });
+</script>
+
 
 <!-- Your existing HTML code -->
 </div>

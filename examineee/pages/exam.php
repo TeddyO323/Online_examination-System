@@ -1,243 +1,302 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+require_once('database.php');
+
+$examId = $_GET['exam_id'];
+$userRegistrationNumber = $_SESSION['reg_no'];
+
+// Fetch exam_time_limit and max_leave_attempts from the database
+$sqlExamDetails = "SELECT exam_time_limit, max_leave_attempts FROM exam_tbl WHERE ex_id='$examId'";
+$resultExamDetails = $conn->query($sqlExamDetails);
+
+if ($resultExamDetails && $resultExamDetails->num_rows > 0) {
+    $rowExamDetails = $resultExamDetails->fetch_assoc();
+    $examTimeLimitInMinutes = $rowExamDetails['exam_time_limit'];
+    $maxLeaveAttempts = $rowExamDetails['max_leave_attempts'];
+} else {
+    echo '<p>Error retrieving exam details. Please contact your administrator.</p>';
+    // Optionally, exit or redirect here
+}
+
+// Fetch questions from the database
+$sqlQuestions = "SELECT * FROM exam_question_tbl WHERE ex_id='$examId'";
+$resultQuestions = $conn->query($sqlQuestions);
+
+if (!$resultQuestions) {
+    echo "Error: " . $sqlQuestions . "<br>" . $conn->error;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="main.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-     
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <title>Exam</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+
+
+    <style>
+       
   
-<script>tinymce.init({selector:'textarea'});</script>
-<style>
-        .header {
-            background-color: #4CAF50;
-            padding: 20px;
-            text-align: center;
-            color: white;
-            font-size: 30px;
-        }
-    
-        .exam-table {
-            padding: 20px;
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
-        .question-text {
+
+
+        body {
+          
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .exam-header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+.exam-header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
             font-weight: bold;
         }
 
-        .question-photo {
-            max-width: 300px;
-            max-height: 300px;
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
         }
 
-        .form-group {
-            padding-left: 1rem;
-        }
-
-        .submit-section {
-            padding: 20px;
-        }
-        
-        .btn {
+     
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
             border: none;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            transition-duration: 0.4s;
+            border-radius: 5px;
             cursor: pointer;
-            border-radius: 8px;
         }
 
-        .btn-warning {
-            background-color: #f44336;
-            color: white;
+        hr {
+            border: 1px solid #ddd;
+            margin: 20px 0;
         }
-
-        .btn-warning:hover {
-            background-color: #da190b;
-        }
-
-        .btn-primary {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #45a049;
-        }
-
-        .float-right {
-            float: right;
+        #timer {
+            position: fixed;
+            top: 10px; /* Adjust the top distance as needed */
+            right: 10px; /* Adjust the right distance as needed */
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            z-index: 1000; /* Adjust the z-index as needed */
         }
     </style>
-
-
 </head>
 <body>
-<div class="header" style="background-color: #4CAF50; padding: 20px; text-align: center; color: white; font-size: 30px;">
-    <?php
-        require_once('database.php');
-        $examId = $_GET['exam_id'];
-        $sql = "SELECT exam_title FROM exam_tbl WHERE ex_id='$examId'";
-        $result = $conn->query($sql);
-
-        if ($result && $result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            echo '<h2>' . $row['exam_title'] . '</h2>';
-        } else {
-            echo '<h2>Exam Title</h2>'; // Default title if the database query fails
-        }
-    ?>
-</div>
-
-
+    
 <div class="app-main__outer">
     <div class="app-main__inner">
-        <div class="col-md-12">
-            <div class="app-page-title">
-                <div class="page-title-wrapper">
-                    <div class="page-title-heading">
-                       
-                    </div>
-                    <div class="page-title-actions mr-5" style="font-size: 20px;">
-                        <form name="cd">
-                            <input type="hidden" name="" id="timeExamLimit" value="">
-                            <label>Remaining Time : </label>
-                            <input style="border:none;background-color: transparent;color:blue;font-size: 25px;" name="disp" type="text" class="clock" id="txt" value="00:00" size="5" readonly="true" />
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <header class="exam-header">
+            <?php
+            // Fetch exam title from the database
+            $sqlExamTitle = "SELECT exam_title FROM exam_tbl WHERE ex_id='$examId'";
+            $resultExamTitle = $conn->query($sqlExamTitle);
 
-        <div class="col-md-12 p-0 mb-4">
-            <form method="post" action="submit-questions.php?exam_id=<?php echo $examId; ?>">
-                <input type="hidden" name="exam_id" id="exam_id" value="">
-                <input type="hidden" name="examAction" id="examAction">
-                <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="tableList">
-                  <?php
-    // Replace with your database connection details
-    require_once('database.php');
-
-    $examId = $_GET['exam_id'];
-    $sql = "SELECT * FROM exam_question_tbl WHERE ex_id='$examId'";
-    $result = $conn->query($sql);
-
-    if ($result) {
-        if ($result->num_rows > 0) {
-            $i = 1;
-            while ($row = $result->fetch_assoc()) {
-                ?>
-                <tr>
-                    <td>
-                        <p><b><?php echo $i++ . ".) " . $row['exam_question']; ?></b></p>
-                         <!-- Display marks here -->
-                    <p>Marks: <?php echo $row['marks']; ?></p>
-                        <?php if ($row['photo'] !== '') { ?>
-                            <img src="<?php echo '/exam/adminpanel/page/uploads/' . $row['photo']; ?>" alt="Question Photo" style="max-width: 300px; max-height: 300px;">
-                        <?php } ?>
-                        <div class="col-md-4 float-left">
-                            <div class="form-group pl-4">
-                                <?php if ($row['question_type'] === 'single_choice' || $row['question_type'] === 'multiple_choice') { ?>
-                                    <input type="hidden" name="question_type[<?php echo $row['eqt_id']; ?>]" value="<?php echo $row['question_type']; ?>">
-                                    <?php if ($row['question_type'] === 'single_choice') { ?>
-                                        <input name="answer[<?php echo $row['eqt_id']; ?>]" class="form-check-input" type="radio" value="<?php echo $row['exam_ch1']; ?>" id="option1_<?php echo $row['eqt_id']; ?>">
-    <label class="form-check-label" for="option1_<?php echo $row['eqt_id']; ?>">
-        <?php echo $row['exam_ch1']; ?>
-    </label>
-    <br>
-    <input name="answer[<?php echo $row['eqt_id']; ?>]" class="form-check-input" type="radio" value="<?php echo $row['exam_ch2']; ?>" id="option2_<?php echo $row['eqt_id']; ?>">
-    <label class="form-check-label" for="option2_<?php echo $row['eqt_id']; ?>">
-        <?php echo $row['exam_ch2']; ?>
-    </label>
-    <br>
-    <input name="answer[<?php echo $row['eqt_id']; ?>]" class="form-check-input" type="radio" value="<?php echo $row['exam_ch3']; ?>" id="option3_<?php echo $row['eqt_id']; ?>">
-    <label class="form-check-label" for="option3_<?php echo $row['eqt_id']; ?>">
-        <?php echo $row['exam_ch3']; ?>
-    </label>
-    <br>
-    <input name="answer[<?php echo $row['eqt_id']; ?>]" class="form-check-input" type="radio" value="<?php echo $row['exam_ch4']; ?>" id="option4_<?php echo $row['eqt_id']; ?>">
-    <label class="form-check-label" for="option4_<?php echo $row['eqt_id']; ?>">
-        <?php echo $row['exam_ch4']; ?>
-    </label>
-    <br>
-                                 <!-- Add similar code for other options if available -->
-<?php } elseif ($row['question_type'] === 'multiple_choice') { ?>
-    <input name="answer[<?php echo $row['eqt_id']; ?>][]" class="form-check-input" type="checkbox" value="<?php echo $row['exam_ch1']; ?>" id="option1_<?php echo $row['eqt_id']; ?>">
-    <label class="form-check-label" for="option1_<?php echo $row['eqt_id']; ?>">
-        <?php echo $row['exam_ch1']; ?>
-    </label>
-    <br>
-    <input name="answer[<?php echo $row['eqt_id']; ?>][]" class="form-check-input" type="checkbox" value="<?php echo $row['exam_ch2']; ?>" id="option2_<?php echo $row['eqt_id']; ?>">
-    <label class="form-check-label" for="option2_<?php echo $row['eqt_id']; ?>">
-        <?php echo $row['exam_ch2']; ?>
-    </label>
-    <br>
-    <!-- Add similar code for other options if available -->
-    <input name="answer[<?php echo $row['eqt_id']; ?>][]" class="form-check-input" type="checkbox" value="<?php echo $row['exam_ch3']; ?>" id="option3_<?php echo $row['eqt_id']; ?>">
-    <label class="form-check-label" for="option3_<?php echo $row['eqt_id']; ?>">
-        <?php echo $row['exam_ch3']; ?>
-    </label>
-    <br>
-    <input name="answer[<?php echo $row['eqt_id']; ?>][]" class="form-check-input" type="checkbox" value="<?php echo $row['exam_ch4']; ?>" id="option4_<?php echo $row['eqt_id']; ?>">
-    <label class="form-check-label" for="option4_<?php echo $row['eqt_id']; ?>">
-        <?php echo $row['exam_ch4']; ?>
-    </label>
-    <br>
-<?php } ?>
+            if ($resultExamTitle && $resultExamTitle->num_rows > 0) {
+                $rowExamTitle = $resultExamTitle->fetch_assoc();
+                $examTitle = $rowExamTitle['exam_title'];
+                echo '<h1>' . $examTitle . '</h1>';
+            } else {
+                echo '<p>Error retrieving exam title. Please contact your administrator.</p>';
+                // Optionally, exit or redirect here
+            }
+            ?>
+        </header>
+            <form id="examForm" action="submit-questions.php?exam_id=<?php echo $examId; ?>" method="post">
+                <div id="timer"></div>
+                <!-- Rest of your form content -->
 
 
-                                                <?php } elseif ($row['question_type'] === 'essay') { ?>
-    <div class="form-group pl-4">
-    <input type="hidden" name="question_type" value="essay">
+            <?php
+            
+            
+            while ($rowQuestion = $resultQuestions->fetch_assoc()) {
+                $questionType = $rowQuestion['question_type'];
+                $questionId = $rowQuestion['eqt_id'];
 
-        <textarea id="essayQuestion_<?php echo $row['eqt_id']; ?>" name="answer[<?php echo $row['eqt_id']; ?>]" rows="4" cols="50"></textarea>
-    </div>
-<?php } ?>
+                echo '<label for="question_' . $questionId . '">' . $rowQuestion['exam_question'] . '</label>';
+                echo '<p' . $questionId . '">' . $rowQuestion['marks'] . ' marks'. '</p>';
+               // Display the photo if available
+    if ($rowQuestion['photo'] !== '') {
+        echo '<img src="/exam/adminpanel/page/uploads/' . $rowQuestion['photo'] . '" alt="Question Photo" style="max-width: 300px; max-height: 300px;">';
+    }
+                
 
+// Inside your while loop where questions are rendered
+switch ($questionType) {
+    case 'essay':
+        echo '<textarea name="answer_' . $questionId . '" id="question_' . $questionId . '" rows="4" cols="50"></textarea>';
+        echo '<script>
+                tinymce.init({
+                    selector: "#question_' . $questionId . '",
+                    height: 300,
+                    plugins: "autoresize",
+                    autoresize_bottom_margin: 16,
+                });
+              </script>';
+        break;
+    case 'single_choice':
+        // Single-choice (radio button)
+        echo '<label><input type="radio" name="answer_' . $questionId . '" value="' . $rowQuestion['exam_ch1'] . '"> ' . $rowQuestion['exam_ch1'] . '</label>';
+        echo '<label><input type="radio" name="answer_' . $questionId . '" value="' . $rowQuestion['exam_ch2'] . '"> ' . $rowQuestion['exam_ch2'] . '</label>';
+        echo '<label><input type="radio" name="answer_' . $questionId . '" value="' . $rowQuestion['exam_ch3'] . '"> ' . $rowQuestion['exam_ch3'] . '</label>';
+        echo '<label><input type="radio" name="answer_' . $questionId . '" value="' . $rowQuestion['exam_ch4'] . '"> ' . $rowQuestion['exam_ch4'] . '</label>';
+        break;
 
+    case 'multiple_choice':
+        // Multiple-choice (checkbox)
+        echo '<label><input type="checkbox" name="answer_' . $questionId . '[]" value="' . $rowQuestion['exam_ch1'] . '"> ' . $rowQuestion['exam_ch1'] . '</label>';
+        echo '<label><input type="checkbox" name="answer_' . $questionId . '[]" value="' . $rowQuestion['exam_ch2'] . '"> ' . $rowQuestion['exam_ch2'] . '</label>';
+        echo '<label><input type="checkbox" name="answer_' . $questionId . '[]" value="' . $rowQuestion['exam_ch3'] . '"> ' . $rowQuestion['exam_ch3'] . '</label>';
+        echo '<label><input type="checkbox" name="answer_' . $questionId . '[]" value="' . $rowQuestion['exam_ch4'] . '"> ' . $rowQuestion['exam_ch4'] . '</label>';
+        break;
 
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php }
-                        } else { ?>
-                            <tr>
-                                <td>
-                                    <b>No questions at this moment</b>
-                                </td>
-                            </tr>
-                        <?php }
-                    } else {
-                        echo "Error: " . $sql . "<br>" . $conn->error;
-                    }
-                    $conn->close();
-                    ?>
-                    <tr>
-                        <td style="padding: 20px;">
-                            <button type="button" class="btn btn-xlg btn-warning p-3 pl-4 pr-4" id="resetExamFrm">Reset</button>
+    // Add additional cases for other question types if needed
 
-                            <input name="submit" type="submit" value="Submit" class="btn btn-xlg btn-primary p-3 pl-4 pr-4 float-right" id="submitAnswerFrmBtn">
-                        </td>
-                    </tr>
-                </table>
-            </form>
-        </div>
-    </div>
-</div>
-<script>
-    tinymce.init({
-        selector: '#essayQuestion_<?php echo $row['eqt_id']; ?>',
-        plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-        toolbar_mode: 'floating',
-        tinycomments_mode: 'embedded',
-        tinycomments_author: 'Author name'
+    default:
+        // Handle unsupported question types
+        echo '<p>Unsupported question type: ' . $questionType . '</p>';
+        break;
+}
+
+                echo '<hr>';
+            }
+            ?>
+            <button type="submit">Submit Exam</button>
+        </form>
+        <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var timerElement = document.getElementById('timer');
+        var timeRemaining;
+
+        // Check if the initial time and original time limit are stored in localStorage for the current user and exam
+        var userStartTimeKey = 'examStartTime_<?php echo $userRegistrationNumber; ?>_exam<?php echo $examId; ?>';
+        var userOriginalTimeLimitKey = 'examOriginalTimeLimit_<?php echo $userRegistrationNumber; ?>_exam<?php echo $examId; ?>';
+
+        var storedStartTime = localStorage.getItem(userStartTimeKey);
+        var storedOriginalTimeLimit = localStorage.getItem(userOriginalTimeLimitKey);
+
+        if (storedStartTime && storedOriginalTimeLimit) {
+            // Calculate the remaining time based on the stored initial time and original time limit
+            var currentTime = new Date().getTime();
+            var elapsedTime = currentTime - parseInt(storedStartTime);
+            timeRemaining = Math.max(parseInt(storedOriginalTimeLimit) - Math.floor(elapsedTime / 1000), 0);
+
+            // If the time is already up, reset the timer
+            if (timeRemaining === 0) {
+                resetTimer();
+            }
+        } else {
+            // If no initial time or original time limit is stored, set the initial time and calculate remaining time
+            localStorage.setItem(userStartTimeKey, new Date().getTime());
+            localStorage.setItem(userOriginalTimeLimitKey, <?php echo $examTimeLimitInMinutes * 60; ?>);
+            timeRemaining = <?php echo $examTimeLimitInMinutes * 60; ?>;
+        }
+
+        function updateTimer() {
+            var minutes = Math.floor(timeRemaining / 60);
+            var seconds = timeRemaining % 60;
+
+            // Display the timer in the 'timer' div
+            timerElement.innerHTML = 'Time Remaining: ' + minutes + ' minutes ' + seconds + ' seconds';
+
+            if (timeRemaining > 0) {
+                timeRemaining--;
+            } else {
+                // If the time is up, show an alert and submit the form
+                alert('Time is up! Your answers will be submitted automatically.');
+                // document.getElementById('examForm').submit();
+                // Reset the timer
+                resetTimer();
+            }
+        }
+
+        function resetTimer() {
+            timeRemaining = <?php echo $examTimeLimitInMinutes * 60; ?>;
+            localStorage.setItem(userStartTimeKey, new Date().getTime());
+            localStorage.setItem(userOriginalTimeLimitKey, <?php echo $examTimeLimitInMinutes * 60; ?>);
+        }
+
+        // Update the timer every second
+        var timerInterval = setInterval(updateTimer, 1000);
+
+        // Clear localStorage when the form is manually submitted or when the exam ends
+        document.getElementById('examForm').addEventListener('submit', function () {
+            clearInterval(timerInterval);
+            localStorage.removeItem(userStartTimeKey);
+            localStorage.removeItem(userOriginalTimeLimitKey);
+        });
     });
 </script>
 
-</body>
+
+
+    </div>
+    
+<script>
+    var leaveCount = 0;
+    var maxLeaveAttempts = <?php echo $maxLeaveAttempts; ?>;
+
+    function handleVisibilityChange() {
+        if (document.hidden) {
+            if (leaveCount < maxLeaveAttempts) {
+                alert('Warning: Leaving the exam page is not allowed. You have ' + (maxLeaveAttempts - leaveCount) + ' more attempts.');
+                leaveCount++;
+            } else {
+                alert('You have exceeded the allowed number of tab switches.');
+                // Submit the form here
+                // document.getElementById('examForm').submit();
+            }
+        }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+</script>
+
+
+ </body>
 </html>

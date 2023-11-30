@@ -56,7 +56,7 @@
                                        
                                     </ul>
                                 </li>
-                                <li class="app-sidebar__heading">MANAGE UNITS</li>
+                                <!-- <li class="app-sidebar__heading">MANAGE UNITS</li>
                                 <li>
                                     <a href="#">
                                          <i class="metismenu-icon pe-7s-display2"></i>
@@ -78,7 +78,7 @@
                                         </li>
                                        
                                     </ul>
-                                </li>
+                                </li> -->
                                
                                
                                 <li class="app-sidebar__heading">MANAGE EXAM</li>
@@ -146,14 +146,14 @@
                                     </a>
                                 </li>
                                 
-                                
+<!--                                 
                                 <li class="app-sidebar__heading">RANKING</li>
                                 <li>
-                                    <a href="home.php?page=ranking-exam">
+                                    <a href="index.php?page=ranking-exam">
                                         <i class="metismenu-icon pe-7s-cup">
                                         </i>Ranking By Exam
                                     </a>
-                                </li>
+                                </li> -->
 
 
                                 <li class="app-sidebar__heading">REPORTS</li>
@@ -167,7 +167,7 @@
 
                                  <li class="app-sidebar__heading">FEEDBACKS</li>
                                 <li>
-                                    <a href="home.php?page=feedbacks">
+                                    <a href="index.php?page=feedbacks">
                                         <i class="metismenu-icon pe-7s-chat">
                                         </i>All Feedbacks
                                     </a>

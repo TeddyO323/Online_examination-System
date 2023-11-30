@@ -1,44 +1,52 @@
-<!-- The HTML code for the form remains the same -->
-
-<!-- PHP code to handle form submission and database insertion -->
 <?php
 include 'database.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
- 
-
-    // Prepare and bind the SQL statement
-    $stmt = $conn->prepare("INSERT INTO examinee_tbl (exmne_fullname, reg_no, exmne_birthdate, exmne_gender, exmne_course, exmne_year_level, exmne_email, exmne_password, contact_no, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssssssss", $examineeFullName, $registrationNumber, $birthdate, $gender, $course, $yearLevel, $email, $password, $contactNumber, $address);
-
-    // Set parameters and execute
+    // Set parameters
     $examineeFullName = $_POST['examineeFullName'];
     $registrationNumber = $_POST['registrationNumber'];
     $birthdate = $_POST['birthdate'];
     $gender = $_POST['gender'];
     $course = $_POST['course'];
-    $yearLevel = $_POST['yearLevel'];
     $email = $_POST['email'];
     $password = $_POST['password'];
     $contactNumber = $_POST['contactNumber'];
     $address = $_POST['address'];
 
-    if ($stmt->execute()) {
-      echo "<script>alert('New record added successfully');</script>";
-      header("Location: index.php");
-      exit();
-    } else {
-      if ($conn->errno == 1062) {
-        echo "<script>alert('Registration Number Already exists!');</script>";
-      } else {
-          echo "Error: " . $stmt . "<br>" . $conn->error;
-      }
-  }
+    // Prepare and bind the SQL statement
+    $stmt = $conn->prepare("INSERT INTO examinee_tbl (exmne_fullname, reg_no, exmne_birthdate, exmne_gender, exmne_course, exmne_email, exmne_password, contact_no, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    
+    // Check if the prepare was successful
+    if (!$stmt) {
+        die("Error: " . $conn->error);
+    }
 
-  $stmt->close();
-  $conn->close();
+    $stmt->bind_param("sssssssss", $examineeFullName, $registrationNumber, $birthdate, $gender, $course, $email, $password, $contactNumber, $address);
+
+    // Execute the statement
+    $success = $stmt->execute();
+
+    // Check for errors
+    if ($success) {
+        echo "<script>alert('New record added successfully');</script>";
+        header("Location: index.php?page=add-examinee");
+        exit();
+    } else {
+        if ($conn->errno == 1062) {
+            echo "<script>alert('Registration Number Already exists!');</script>";
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+    }
+
+    // Close the statement
+    $stmt->close();
+    
+    // Close the connection
+    $conn->close();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -172,15 +180,7 @@ foreach ($courseList as $course) {
 }
 ?>
     </select>
-            <div class="form-group">
-                <label for="yearLevel">Year Level</label>
-                <select class="form-control" id="yearLevel" name="yearLevel">
-                    <option value="first year">First Year</option>
-                    <option value="second year">Second Year</option>
-                    <option value="third year">Third Year</option>
-                    <option value="fourth year">Fourth Year</option>
-                </select>
-            </div>
+    
             <div class="form-group">
                 <label for="address">Address</label>
                 <input type="text" class="form-control" id="address" name="address" required>

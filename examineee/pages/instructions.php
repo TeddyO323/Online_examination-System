@@ -1,72 +1,171 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+require_once('database.php');
+
+$examId = $_GET['exam_id'];
+$userRegistrationNumber = $_SESSION['reg_no'];
+
+// Initialize the variables to avoid "undefined variable" notices
+$attemptsAllowed = $startDateTime = $endDateTime = $currentDateTime = $attemptsLeft = $numAttemptsMade = '';
+
+// Retrieve the allowed number of attempts, start datetime, and end datetime for the exam
+$sqlExam = "SELECT attempts_allowed, exam_start_datetime, exam_end_datetime FROM exam_tbl WHERE ex_id='$examId'";
+$resultExam = $conn->query($sqlExam);
+
+if ($resultExam && $resultExam->num_rows > 0) {
+    $rowExam = $resultExam->fetch_assoc();
+    $attemptsAllowed = $rowExam['attempts_allowed'];
+    $startDateTime = $rowExam['exam_start_datetime'];
+    $endDateTime = $rowExam['exam_end_datetime'];
+
+    // Check if the current datetime is within the allowed range
+    $currentDateTime = (new DateTime(null, new DateTimeZone('GMT+3')))->format('Y-m-d H:i:s');
+    
+    if ($currentDateTime < $startDateTime || $currentDateTime > $endDateTime) {
+        echo '<p>Sorry, the exam is not currently accessible. Please check the opening date and time.</p>';
+        exit;
+    }
+    
+
+    // Retrieve the number of attempts made by the user for this exam
+    $sqlAttempts = "SELECT COUNT(*) as num_attempts FROM exam_attempt WHERE reg_no='$userRegistrationNumber' AND exam_id='$examId'";
+    $resultAttempts = $conn->query($sqlAttempts);
+
+    if (!$resultAttempts) {
+        echo "Error: " . $sqlAttempts . "<br>" . $conn->error;
+    }
+
+    if ($resultAttempts && $resultAttempts->num_rows > 0) {
+        $rowAttempts = $resultAttempts->fetch_assoc();
+        $numAttemptsMade = $rowAttempts['num_attempts'];
+
+        // Calculate the remaining attempts
+        $attemptsLeft = $attemptsAllowed - $numAttemptsMade;
+    } else {
+        echo '<p>Error retrieving user attempts. Please contact your administrator.</p>';
+        // Optionally, exit or redirect here
+    }
+} else {
+    echo '<p>Error retrieving exam information. Please contact your administrator.</p>';
+    // Optionally, exit or redirect here
+}
+
+// Close the database connection
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exam Instructions</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            font-size: 16px;
             line-height: 1.6;
+            letter-spacing: 0.5px;
             margin: 0;
-            padding: 20px;
-            text-align: center;
+            padding: 0;
+            background-color: #f4f4f4;
         }
-        h1 {
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .instructions-section,
+        .exam-details-section {
             margin-bottom: 20px;
         }
-        .instructions {
-            background: #f4f4f4;
-            border: 1px solid #ccc;
-            padding: 10px;
+
+        .button {
             display: inline-block;
-            align: left;
-        }
-        .start-button {
-            display: inline-block;
-            margin-top: 20px;
             padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 5px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            background-color: #f8d7da;
+            color: #721c24;
         }
     </style>
 </head>
 <body>
-<div class="app-main__outer">
-        <div class="app-main__inner">
-    <h1>Exam Instructions</h1>
-    <div class="instructions">
-        <h2>General Instructions:</h2>
-        <ul>
-            <li>Read all instructions carefully before starting the exam.</li>
-            <li>Make sure you have a stable internet connection.</li>
-            <li>Do not refresh the page during the exam.</li>
-            <!-- Add more general instructions here -->
-        </ul>
-        <h2>Exam-Specific Instructions:</h2>
-        <p>Write your specific instructions here...</p>
-    </div>
-   <br>
-   <?php
-// Retrieve the 'exam_id' from the URL
-$examId = $_GET['exam_id'];
+    <div class="container">
+        <h1>Exam Instructions</h1>
+        <div class="instructions-section">
+            <h2>General Instructions:</h2>
+            <ul>
+                <li>Read all instructions carefully before starting the exam.</li>
+                <li>Make sure you have a stable internet connection.</li>
+                <li>Do not refresh the page during the exam.</li>
+                <!-- Add more general instructions here -->
+            </ul>
+        </div>
 
-// Use the $examId in your code as needed
-// ...
-?>
+        <div class="exam-details-section">
+            <h2>Exam-Specific Instructions:</h2>
+            <p>Write your specific instructions here...</p>
+            <p>Opening Date and Time: <?php echo $startDateTime; ?></p>
+            <p>Closing Date and Time: <?php echo $endDateTime; ?></p>
+            
+            <?php
+            if (isset($attemptsLeft)) {
+                echo '<p>You have ' . $attemptsLeft . ' attempts remaining for this exam.</p>';
+            }
 
-   <a href="pages/exam.php?exam_id=<?php echo $examId; ?>">Start Exam</a>
-    </div>
+            // Check if the user has exceeded the allowed attempts
+            if (isset($numAttemptsMade) && $numAttemptsMade >= $attemptsAllowed) {
+                echo '<div class="alert">
+                          <p>You have reached the maximum number of attempts for this exam. Contact your examiner for assistance.</p>
+                      </div>';
+            } else {
+                echo '<button id="startExamButton" onclick="startExam(' . $examId . ', \'' . $currentDateTime . '\', \'' . $startDateTime . '\', \'' . $endDateTime . '\')"';
+                echo ($currentDateTime < $startDateTime ? ' disabled' : '');
+                echo ' style="padding: 10px 20px;
+                             text-decoration: none;
+                             color: #fff;
+                             background-color: #007bff;
+                             border-radius: 5px;
+                             cursor: pointer;">Start Exam</button>';
+                
+                            }
+            ?>
+        </div>
     </div>
     <script>
-        function redirectToExam() {
-            // Redirect the user to the exam page
-            window.location.href = 'pages/exam.php'; // Replace 'your_exam_page_url' with your actual exam page URL
-        }
+    function startExam(examId, currentDateTime, startDateTime, endDateTime) {
+    var currentTimestamp = Date.parse(currentDateTime);
+    var startTimestamp = Date.parse(startDateTime);
+    var endTimestamp = Date.parse(endDateTime);
+
+    if (currentTimestamp < startTimestamp || currentTimestamp > endTimestamp) {
+        alert('Sorry, the exam is not currently accessible. Please check the opening date and time.');
+    } else {
+        // Specify the URL of your exam page
+        var examUrl = 'pages/exam.php?exam_id=' + examId;
+
+        // Open the exam in a new window with specified features
+        window.open(examUrl, '_blank', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes');
+    }
+}
     </script>
 </body>
 </html>
