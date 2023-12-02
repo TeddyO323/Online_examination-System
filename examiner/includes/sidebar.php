@@ -1,3 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+.scrollbar-sidebar {
+  color: #fff; /* Text color */
+  width: 250px; /* Set the width of the sidebar */
+  padding: 20px; /* Add padding to the content inside the sidebar */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add a box shadow for depth */
+}
+
+/* Optional: Add styles for scrollbar customization */
+.scrollbar-sidebar {
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #fff #7d2ae8; /* Change scrollbar colors */
+}
+
+/* Optional: Style for the links inside the sidebar */
+.scrollbar-sidebar a {
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 0;
+  display: block;
+}
+
+/* Optional: Hover effect for links */
+.scrollbar-sidebar a:hover {
+  background-color: #6320a8;
+}
+
+
+    </style>
+</head>
+<body>
 <div class="app-sidebar sidebar-shadow">
                     <div class="app-header__logo">
                         <div class="logo-srca"></div>
@@ -116,3 +154,6 @@
                         </div>
                     </div>
                 </div>  
+
+</body>
+</html>

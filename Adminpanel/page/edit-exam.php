@@ -112,7 +112,7 @@ $conn->close();
         input[type="submit"] {
             width: 100%;
             padding: 10px;
-            background-color: #4CAF50;
+            background-color: #4ef037;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -124,7 +124,7 @@ $conn->close();
         button[type="submit"] {
             width: 100%;
             padding: 10px;
-            background-color: #4caf50;
+            background-color: #4ef037;
             color: #ffffff;
             border: none;
             border-radius: 5px;
@@ -149,7 +149,7 @@ $conn->close();
             height: 100px; /* Adjust the height as needed */
         }
         input[type="submit"] {
-            background-color: #007bff;
+            background-color: #4ef037;
             color: #fff;
             border: none;
             padding: 10px 20px;

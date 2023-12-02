@@ -46,7 +46,7 @@
             display: inline-block;
             padding: 8px 16px;
             text-decoration: none;
-            background-color: #4CAF50;
+            background-color: #7d2ae8;
             color: white;
             border-radius: 5px;
         }

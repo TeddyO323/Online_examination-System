@@ -55,9 +55,9 @@
         .select-exam-button {
             padding: 10px 20px;
             font-size: 16px;
-            border: 2px solid #4CAF50;
+            border: 2px solid #4ef037;
             border-radius: 5px;
-            background-color: #4CAF50;
+            background-color: #4ef037;
             color: #fff;
             cursor: pointer;
         }

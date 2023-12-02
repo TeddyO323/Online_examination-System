@@ -20,7 +20,7 @@
         }
         .card-header {
             padding: 10px 15px;
-            background-color: #007bff;
+            background-color: #e48d2a;
             color: #fff;
             font-size: 18px;
             margin-bottom: 15px;
@@ -49,8 +49,8 @@
         }
         .btn-primary {
             color: #fff;
-            background-color: #007bff;
-            border-color: #007bff;
+            background-color: #e48d2a;
+            border-color: #e48d2a;
         }
         .btn-primary:hover {
             background-color: #0056b3;
@@ -80,7 +80,7 @@
         border-color: #bd2130;
     }
     .edit-button {
-        background-color: #007bff;
+        background-color: #e48d2a;
         color: white;
     }
 

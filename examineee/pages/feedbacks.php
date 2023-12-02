@@ -74,7 +74,7 @@
             padding: 10px;
             border-radius: 5px;
             border: none;
-            background-color: #007bff;
+            background-color: #e48d2a;
             color: #fff;
             cursor: pointer;
         }

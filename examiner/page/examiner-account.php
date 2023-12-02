@@ -49,7 +49,7 @@
             background-color: #e2e2e2;
         }
         button {
-            background-color: #4CAF50;
+            background-color: #7d2ae8;
             color: white;
             padding: 6px 10px;
             border: none;

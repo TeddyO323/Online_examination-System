@@ -83,7 +83,7 @@
         input[type="submit"] {
             width: 100%;
             padding: 10px;
-            background-color: #4CAF50;
+            background-color: #4ef037;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -95,7 +95,7 @@
         button[type="submit"] {
             width: 100%;
             padding: 10px;
-            background-color: #4caf50;
+            background-color: #4ef037;
             color: #ffffff;
             border: none;
             border-radius: 5px;

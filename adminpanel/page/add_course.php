@@ -29,7 +29,7 @@
         }
         input[type=submit] {
             width: 100%;
-            background-color: #4CAF50;
+            background-color: #4ef037;
             color: white;
             padding: 14px 20px;
             margin: 8px 0;
@@ -120,7 +120,7 @@ select::-moz-focus-inner {
                 <label for="course_prerequisites">Prerequisites:</label><br>
                 <input type="text" id="course_prerequisites" name="course_prerequisites"><br><br>
 
-                <input type="submit" value="Submit">
+                <input type="submit" class="submit" value="Submit">
             </form>
         </div>
     </div>

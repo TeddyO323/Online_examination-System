@@ -22,12 +22,9 @@ if ($resultExam && $resultExam->num_rows > 0) {
 
     // Check if the current datetime is within the allowed range
     $currentDateTime = (new DateTime(null, new DateTimeZone('GMT+3')))->format('Y-m-d H:i:s');
-    
-    if ($currentDateTime < $startDateTime || $currentDateTime > $endDateTime) {
-        echo '<p>Sorry, the exam is not currently accessible. Please check the opening date and time.</p>';
-        exit;
-    }
-    
+
+    // Additional check to determine if the exam is accessible
+    $isExamAccessible = ($currentDateTime >= $startDateTime && $currentDateTime <= $endDateTime);
 
     // Retrieve the number of attempts made by the user for this exam
     $sqlAttempts = "SELECT COUNT(*) as num_attempts FROM exam_attempt WHERE reg_no='$userRegistrationNumber' AND exam_id='$examId'";
@@ -55,6 +52,7 @@ if ($resultExam && $resultExam->num_rows > 0) {
 // Close the database connection
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,12 +88,12 @@ $conn->close();
             padding: 10px 20px;
             text-decoration: none;
             color: #fff;
-            background-color: #007bff;
+            background-color: #e48d2a;
             border-radius: 5px;
         }
 
         .button:hover {
-            background-color: #0056b3;
+            background-color: #dd7e12;
         }
 
         .alert {
@@ -105,11 +103,16 @@ $conn->close();
             background-color: #f8d7da;
             color: #721c24;
         }
+        .message-container {
+            color: red; /* Change this to the desired color */
+            background-color: #f8d7da;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Exam Instructions</h1>
+
         <div class="instructions-section">
             <h2>General Instructions:</h2>
             <ul>
@@ -136,36 +139,39 @@ $conn->close();
                 echo '<div class="alert">
                           <p>You have reached the maximum number of attempts for this exam. Contact your examiner for assistance.</p>
                       </div>';
-            } else {
+            } else if ($currentDateTime >= $startDateTime && $currentDateTime <= $endDateTime) {
+                // Display the "Start Exam" button only if the exam is accessible
                 echo '<button id="startExamButton" onclick="startExam(' . $examId . ', \'' . $currentDateTime . '\', \'' . $startDateTime . '\', \'' . $endDateTime . '\')"';
-                echo ($currentDateTime < $startDateTime ? ' disabled' : '');
                 echo ' style="padding: 10px 20px;
                              text-decoration: none;
                              color: #fff;
                              background-color: #007bff;
                              border-radius: 5px;
                              cursor: pointer;">Start Exam</button>';
-                
-                            }
+            } else {
+                // Display a message if the exam is not accessible
+                echo '<p class="alert">Sorry, the exam is not currently accessible. Please check the opening and closing date and time.</p>';
+            }
             ?>
         </div>
     </div>
+    
     <script>
-    function startExam(examId, currentDateTime, startDateTime, endDateTime) {
-    var currentTimestamp = Date.parse(currentDateTime);
-    var startTimestamp = Date.parse(startDateTime);
-    var endTimestamp = Date.parse(endDateTime);
+        function startExam(examId, currentDateTime, startDateTime, endDateTime) {
+            var currentTimestamp = Date.parse(currentDateTime);
+            var startTimestamp = Date.parse(startDateTime);
+            var endTimestamp = Date.parse(endDateTime);
 
-    if (currentTimestamp < startTimestamp || currentTimestamp > endTimestamp) {
-        alert('Sorry, the exam is not currently accessible. Please check the opening date and time.');
-    } else {
-        // Specify the URL of your exam page
-        var examUrl = 'pages/exam.php?exam_id=' + examId;
+            if (currentTimestamp < startTimestamp || currentTimestamp > endTimestamp) {
+                alert('Sorry, the exam is not currently accessible. Please check the opening date and time.');
+            } else {
+                // Specify the URL of your exam page
+                var examUrl = 'pages/exam.php?exam_id=' + examId;
 
-        // Open the exam in a new window with specified features
-        window.open(examUrl, '_blank', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes');
-    }
-}
+                // Open the exam in a new window with specified features
+                window.open(examUrl, '_blank', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes');
+            }
+        }
     </script>
 </body>
 </html>

@@ -33,7 +33,7 @@
     }
 
     button {
-        background-color: #4CAF50;
+        background-color: #7d2ae8;
         color: white;
         cursor: pointer;
     }

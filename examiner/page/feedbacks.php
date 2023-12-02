@@ -22,7 +22,7 @@
 
         .card-header {
             padding: 10px 15px;
-            background-color: #007bff;
+            background-color: #7d2ae8;
             color: #fff;
             font-size: 18px;
             margin-bottom: 15px;

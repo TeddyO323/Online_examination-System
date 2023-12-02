@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['unit_id'])) {
             padding: 10px;
             border-radius: 5px;
             border: none;
-            background-color: #4CAF50;
+            background-color: #7d2ae8;
             color: white;
             cursor: pointer;
         }

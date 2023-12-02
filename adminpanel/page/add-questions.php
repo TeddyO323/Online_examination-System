@@ -6,7 +6,7 @@
     <style>
         /* Style for the buttons */
         button[type="submit"] {
-            background-color: #4CAF50;
+            background-color: #4ef037;
             color: white;
             padding: 12px 20px;
             border: none;

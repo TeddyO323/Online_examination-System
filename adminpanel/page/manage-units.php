@@ -31,7 +31,7 @@ $rowNumber = 1;
         }
         .card-header {
             padding: 10px 15px;
-            background-color: #007bff;
+            background-color: #4ef037;
             color: #fff;
             font-size: 18px;
             margin-bottom: 15px;
@@ -60,8 +60,8 @@ $rowNumber = 1;
         }
         .btn-primary {
             color: #fff;
-            background-color: #007bff;
-            border-color: #007bff;
+            background-color: #4ef037;
+            border-color: #4ef037;
         }
         .btn-primary:hover {
             background-color: #0056b3;
@@ -78,7 +78,7 @@ $rowNumber = 1;
     .edit-button {
         display: inline-block;
         padding: 10px 15px;
-        background-color: #4CAF50;
+        background-color: #4ef037;
         color: white;
         border: none;
         border-radius: 4px;
@@ -106,7 +106,7 @@ $rowNumber = 1;
     }
 
     .edit-button {
-        background-color: #4CAF50;
+        background-color: #4ef037;
         color: white;
     }
 

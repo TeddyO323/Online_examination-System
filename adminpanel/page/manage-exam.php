@@ -13,7 +13,7 @@
         }
         .card-header {
             padding: 10px 15px;
-            background-color: #007bff;
+            background-color: #4ef037;
             color: #fff;
             font-size: 18px;
             margin-bottom: 15px;
@@ -42,8 +42,8 @@
         }
         .btn-primary {
             color: #fff;
-            background-color: #007bff;
-            border-color: #007bff;
+            background-color: #4ef037;
+            border-color: #4ef037;
         }
         .btn-primary:hover {
             background-color: #0056b3;

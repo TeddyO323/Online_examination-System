@@ -33,6 +33,9 @@ if ($result->num_rows > 0) {
     font-size: 15px; /* Adjust the font size as needed */
     margin: 0; /* Reset margin if necessary */
 }
+.Site-name{
+    color: white;
+}
 
 </style>
 
@@ -46,7 +49,7 @@ if ($result->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
      
     <!-- MAIN CSS NIYA -->
-    <link href="./main.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
     <link href="css/sweetalert.css" rel="stylesheet">
     <link href="css/facebox.css" rel="stylesheet">
     <style>
@@ -58,6 +61,8 @@ if ($result->num_rows > 0) {
     <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
         <div class="app-header header-shadow">
             <div class="app-header__logo">
+            <a href="index.php"><div class= "Site-name"><b>ExamEase</b></div></a>
+
                 <div class="logo-srsc"><b style="margin-left: 2px;"></b></div>
                 <div class="header__pane ml-auto">
                     <div>

@@ -31,7 +31,7 @@
         input[type="submit"] {
             padding: 10px 15px;
             font-size: 16px;
-            background-color: #4285f4;
+            background-color: #e48d2a;
             color: #ffffff;
             border: none;
             cursor: pointer;
@@ -44,7 +44,7 @@
         }
         button {
         padding: 10px 20px;
-        background-color: #3498db; /* Adjust the background color as needed */
+        background-color: #e48d2a; /* Adjust the background color as needed */
         color: #fff; /* Text color */
         border: none;
         border-radius: 5px;
@@ -61,7 +61,7 @@
         }
 
         th {
-            background-color: #4285f4;
+            background-color: #e48d2a;
             color: #ffffff;
         }
 

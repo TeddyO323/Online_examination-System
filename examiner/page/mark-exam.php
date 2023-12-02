@@ -38,7 +38,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
         input[type="submit"] {
             padding: 10px 20px;
-            background-color: #4CAF50;
+            background-color: #7d2ae8;
             color: #fff;
             border: none;
             border-radius: 4px;

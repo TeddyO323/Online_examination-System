@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         input[type="submit"] {
             width: 100%;
             padding: 10px;
-            background-color: #4CAF50;
+            background-color: #4ef037;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -110,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             padding: 10px;
             border-radius: 5px;
             border: none;
-            background-color: #007bff;
+            background-color: #4ef037;
             color: #fff;
             cursor: pointer;
         }

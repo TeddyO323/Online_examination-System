@@ -48,7 +48,7 @@ $examDropdownResult = $conn->query($examDropdownQuery);
         input[type="submit"] {
             padding: 10px 15px;
             font-size: 16px;
-            background-color: #4285f4;
+            background-color: #7d2ae8;
             color: #ffffff;
             border: none;
             cursor: pointer;
@@ -78,7 +78,7 @@ $examDropdownResult = $conn->query($examDropdownQuery);
         }
 
         th {
-            background-color: #4285f4;
+            background-color: #7d2ae8;
             color: #ffffff;
         }
 

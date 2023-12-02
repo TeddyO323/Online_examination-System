@@ -46,7 +46,7 @@ if (!$resultQuestions) {
   
         button {
             padding: 10px 20px;
-            background-color: #007bff;
+            background-color: #e48d2a;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -72,7 +72,7 @@ if (!$resultQuestions) {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .exam-header {
-    background-color: #007bff;
+    background-color: #e48d2a;
     color: #fff;
     padding: 20px;
     text-align: center;
@@ -102,7 +102,7 @@ if (!$resultQuestions) {
      
         button {
             padding: 10px 20px;
-            background-color: #007bff;
+            background-color: #e48d2a;
             color: #fff;
             border: none;
             border-radius: 5px;
