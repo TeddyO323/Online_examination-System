@@ -39,52 +39,109 @@ By presenting the OEES project's objectives and the challenges it aims to solve,
 - [Contributing](#contributing)
 - [License](#license)
 
-## Features
+# Online Examination System
 
-The Online Examination and Evaluation System (OEES) offers a comprehensive set of features and functionalities designed to address the evolving needs of educators, administrators, and students in the digital education landscape. Key features of the OEES include:
+## Overview
 
-1. **Customization Options:**
-   - Tailor assessment formats and question types to align with your curriculum and educational objectives.
+The Online Examination System is a web-based platform designed to facilitate the administration and management of exams. It provides separate panels for administrators, examiners, and examinees, each with specific functionalities.
 
-2. **Accessibility and Inclusivity:**
-   - Ensure equitable access for all students with integrated accessibility features and compliance with relevant standards, such as WCAG.
+## Admin Panel
 
-3. **Advanced Security Measures:**
-   - Maintain the integrity of online assessments with identity verification, secure exam proctoring, and anti-cheating mechanisms.
+### Course Management
+- Add, edit, or delete courses.
 
-4. **Data Analytics and Reporting:**
-   - Gain valuable insights into student performance and assessment outcomes with robust data analytics tools and comprehensive reporting.
+### Exam Management
+- Add, edit, or delete exams.
 
-5. **User-Friendly Interface:**
-   - Enjoy a simple, intuitive interface that enhances user experience and encourages technology adoption among educators and students.
+### User Management
+- Add, edit, or delete examiners and examinees.
+- Approve examiner and examinee accounts.
 
-6. **Integration Capabilities:**
-   - Seamlessly integrate the OEES with your existing educational systems and technologies, streamlining assessment processes.
+### Question Management
+- Add, edit, or delete questions.
+- Export questions for offline use.
 
-7. **Customization and Scalability:**
-   - Adapt the system to meet the unique needs of your educational institution while ensuring scalability to accommodate institutions of varying sizes and resource levels.
+### Results
+- View examinee results.
 
-8. **Training and Support:**
-   - Access comprehensive training materials and support resources to facilitate effective OEES adoption for educators and administrators.
+### Account Management
+- Suspend user accounts.
 
-9. **Ethical Considerations and Privacy:**
-   - Address data privacy and ethical considerations with implemented guidelines and protocols for responsible data collection and usage.
+## Examinee Panel
 
-10. **Continuous Improvement:**
-    - Benefit from ongoing updates and enhancements based on evolving needs and technological advancements, with a strong emphasis on user satisfaction, security, accessibility, and data-driven decision-making.
+### Exam
+- Take exams securely.
+- Restrict leaving the exam page.
 
-The OEES combines these features to provide an all-encompassing solution that enhances the assessment and evaluation processes for educators and institutions, contributing to improved educational outcomes in the digital age.
+### Feedback
+- Provide feedback on exams.
 
+### Certificate
+- Generate certificates upon successful completion.
+
+## Examiner Panel
+
+### Question Management
+- Add questions for exams.
+
+### Results
+- View examinee results.
+
+### Exam Grading
+- Mark and grade exams.
+
+## Other Features
+
+### Timer
+- Each exam has a timer to track the duration.
+
+## Usage
+
+1. **Admin Panel**
+   - Navigate to the admin panel.
+   - Manage courses, exams, users, and questions.
+   - View results and suspend accounts.
+
+2. **Examinee Panel**
+   - Log in to the examinee panel.
+   - Take exams with a timer.
+   - Provide feedback and generate certificates.
+
+3. **Examiner Panel**
+   - Log in to the examiner panel.
+   - Add questions, view results, and grade exams.
 
 ## Installation
 
-To set up the Online Examination and Evaluation System (OEES), follow these installation steps:
+### Create a new database:
 
-1. **Prerequisites:**
-   - [List any prerequisites or system requirements, such as programming languages, databases, or software dependencies.]
+1. Open your web browser and go to [http://localhost/phpmyadmin](http://localhost/phpmyadmin).
+2. Create a new database named `ccbd_online_exam`.
 
-2. **Installation Process:**
-   - [Provide clear, step-by-step installation instructions, including any configuration settings or commands.]
+### Import the database schema:
+
+1. In the `online-exam-system` project directory, locate the SQL file, usually named `ccbd_online_exam.sql`.
+2. Import this file into the `ccbd_online_exam` database using phpMyAdmin.
+
+### Configure database connection:
+
+1. Open the project directory and find the configuration file, often named `database.php` or similar.
+2. Update the database connection parameters (username, password, database name) if needed.
+
+### Start the XAMPP control panel:
+
+1. Open XAMPP and start the Apache server.
+
+### Access the application:
+
+1. Open your web browser and go to [http://localhost/online-exam-system](http://localhost/online-exam-system) (replace `online-exam-system` with the actual project folder name).
+
+### Login credentials:
+
+#### Admin Panel
+- Email: omosh60@gmail.com
+- Password: 12345678
+
 
 ## Usage
 
@@ -119,15 +176,9 @@ We welcome contributions from the community to enhance the OEES project. Here's 
 
 The OEES project is released under the [License Name] license. You can find the full text of the license [here](#).
 
-[Include any necessary disclaimers or acknowledgments.]
 
 ---
 
-[Include your contact information or a link to your personal or organization's GitHub page for inquiries and support.]
-
-[Add badges, such as version, build status, or license, if applicable.]
-
-[Include any additional documentation or links to resources.]
 
 
 
