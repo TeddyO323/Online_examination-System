@@ -1,5 +1,7 @@
 # Online Examination and Evaluation System (OEES)
 
+### Still not yet fully complete but it is operational
+
 ## Project Overview
 
 The Online Examination and Evaluation System (OEES) is a cutting-edge educational technology initiative designed to address the evolving challenges in assessment and evaluation within the digital education landscape. In a world increasingly reliant on remote learning and online education, the OEES aims to provide a comprehensive solution for educational institutions, educators, and students.
@@ -39,11 +41,6 @@ By presenting the OEES project's objectives and the challenges it aims to solve,
 - [Contributing](#contributing)
 - [License](#license)
 
-# Online Examination System
-
-## Overview
-
-The Online Examination System is a web-based platform designed to facilitate the administration and management of exams. It provides separate panels for administrators, examiners, and examinees, each with specific functionalities.
 
 ## Admin Panel
 
